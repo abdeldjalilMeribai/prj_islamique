@@ -580,6 +580,43 @@
                 io.observe(el);
             });
         });
+
+        // ── Slider d'images du hero uniquement sur mobile ──
+        (function () {
+            const hero = document.querySelector('.hero');
+            if (!hero) return;
+
+            // Liste des images pour mobile 
+            const mobileBgImages = [
+                "url('/static/images/1.jpg')",
+                "url('/static/images/hero-mobile2.png')",
+            ];
+
+            let currentBg = 0;
+            const mediaQuery = window.matchMedia('(max-width: 767px)');
+
+            function updateHeroBg() {
+                if (mediaQuery.matches) {
+                    hero.style.setProperty('--hero-mobile-bg', mobileBgImages[currentBg]);
+                    currentBg = (currentBg + 1) % mobileBgImages.length;
+                }
+            }
+
+            // Première image immédiate si on est sur mobile
+            updateHeroBg();
+
+            // Changement toutes les 5 secondes
+            setInterval(updateHeroBg, 5000);
+
+            // Mise à jour si la taille d'écran change (ex : rotation)
+            mediaQuery.addEventListener('change', () => {
+                if (mediaQuery.matches) {
+                    // Remettre à zéro et afficher la première image
+                    currentBg = 0;
+                    updateHeroBg();
+                }
+            });
+        })();
     </script>
 
     {% block extra_js %}{% endblock %}

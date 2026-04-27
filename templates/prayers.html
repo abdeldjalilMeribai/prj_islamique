@@ -1,0 +1,1011 @@
+{% extends "base.html" %}
+
+{% block title %}أوقات الصلاة - سبيل المسلم{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* ═══════════════════════════════════════════════
+   PRAYERS PAGE — Premium Redesign
+═══════════════════════════════════════════════ */
+
+/* ── MOBILE : ton image originale (inchangée) ── */
+.page-header::before {
+    background:
+        linear-gradient(180deg,
+            rgba(4, 4, 13, .45) 0%,
+            rgba(4, 4, 13, .20) 40%,
+            rgba(4, 4, 13, .92) 100%),
+        url('https://i.pinimg.com/736x/4a/10/9c/4a109c543b84e6a6cd8e38b2e012c826.jpg') center 35% / cover no-repeat;
+}
+
+/* ── DESKTOP uniquement : nouvelle image paysage ── */
+@media (min-width: 768px) {
+    .page-header::before {
+        background:
+            linear-gradient(180deg,
+                rgba(4, 4, 13, .42) 0%,
+                rgba(4, 4, 13, .08) 38%,
+                rgba(4, 4, 13, .90) 100%),
+            url('static/images/2.jpg') center 30% / cover no-repeat !important;
+    }
+}
+
+    /* ── Prayer section wrapper ── */
+    .prayers-section {
+        padding: 3rem 0 5rem;
+        position: relative;
+        z-index: 1;
+    }
+
+    /* ── Date Bar ── */
+    .date-bar {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 1.5rem;
+        flex-wrap: wrap;
+        margin-bottom: 2.5rem;
+    }
+
+    .date-badge {
+        display: flex;
+        align-items: center;
+        gap: .7rem;
+        background: var(--panel);
+        border: 1px solid var(--border);
+        border-radius: 50px;
+        padding: .75rem 1.6rem;
+        font-size: .92rem;
+        font-weight: 500;
+        backdrop-filter: blur(15px);
+        box-shadow: var(--shadow-card);
+        color: var(--text-main);
+        transition: all .3s;
+    }
+
+    .date-badge i {
+        color: var(--gold);
+        font-size: 1rem;
+    }
+
+    .date-badge:hover {
+        border-color: var(--gold-border);
+        box-shadow: 0 8px 30px rgba(0, 0, 0, .5), 0 0 0 1px rgba(201, 168, 76, .25);
+    }
+
+    /* ── Location bar ── */
+    .location-bar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background: var(--panel);
+        border: 1px solid var(--border);
+        border-radius: var(--r);
+        padding: 1.1rem 1.8rem;
+        margin-bottom: 2rem;
+        backdrop-filter: blur(15px);
+        box-shadow: var(--shadow-card);
+        flex-wrap: wrap;
+        gap: 1rem;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .location-bar::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 10%;
+        right: 10%;
+        height: 1px;
+        background: linear-gradient(90deg, transparent, var(--gold), transparent);
+        opacity: .4;
+    }
+
+    .location-details {
+        display: flex;
+        align-items: center;
+        gap: .8rem;
+        color: var(--text-muted);
+        font-size: .92rem;
+    }
+
+    .location-details i {
+        color: var(--gold);
+        font-size: 1.1rem;
+    }
+
+    /* ── Prayer Grid — Big Cards ── */
+    .prayer-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 1.5rem;
+        margin-top: 1rem;
+    }
+
+    .prayer-big-card {
+        background: var(--panel);
+        border: 1px solid var(--border);
+        border-radius: var(--r-lg);
+        overflow: hidden;
+        position: relative;
+        transition: all .45s cubic-bezier(.34, 1.56, .64, 1);
+        backdrop-filter: blur(18px);
+        box-shadow: var(--shadow-card);
+    }
+
+    /* Top color band per prayer */
+    .prayer-big-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: linear-gradient(90deg, transparent, var(--gold), transparent);
+        transition: opacity .4s;
+    }
+
+    .prayer-big-card:hover {
+        transform: translateY(-8px) scale(1.01);
+        border-color: var(--gold-border);
+        box-shadow:
+            0 20px 60px rgba(0, 0, 0, .6),
+            0 0 0 1px rgba(201, 168, 76, .35),
+            0 0 40px rgba(201, 168, 76, .08);
+    }
+
+    /* Card background image per prayer */
+    .prayer-big-card .card-bg {
+        position: absolute;
+        inset: 0;
+        background-size: cover;
+        background-position: center;
+        opacity: .07;
+        transition: opacity .4s;
+    }
+
+    .prayer-big-card:hover .card-bg {
+        opacity: .12;
+    }
+
+    /* Fajr */
+    .prayer-big-card[data-prayer="fajr"] .card-bg {
+        background-image: url('https://i.pinimg.com/736x/80/ef/45/80ef454398f771996752573cdbabbf19.jpg');
+        opacity: .30;
+    }
+
+    /* Sunrise */
+    .prayer-big-card[data-prayer="sunrise"] .card-bg {
+        background-image: url('https://i.pinimg.com/1200x/c9/f3/46/c9f34603218c3e2d4bb00ffb957c78d1.jpg');
+        opacity: .30;
+    }
+
+    /* Dhuhr */
+    .prayer-big-card[data-prayer="dhuhr"] .card-bg {
+        
+        background-image: url('https://i.pinimg.com/736x/94/ce/ee/94ceee8ff57547da7e1ae156a46b3503.jpg');
+        opacity: .30;
+    }
+
+    /* Asr */
+    .prayer-big-card[data-prayer="asr"] .card-bg {
+        background-image: url('https://i.pinimg.com/736x/24/58/16/2458169fb65970f0ed38f7e06dac3118.jpg');
+        opacity: .30;
+    }
+
+    /* Maghrib */
+    .prayer-big-card[data-prayer="maghrib"] .card-bg {
+        background-image: url('https://i.pinimg.com/1200x/34/c8/f6/34c8f68d12bda6294be1dae08afa8215.jpg');
+        opacity: .30;
+    }
+
+    /* Isha */
+    .prayer-big-card[data-prayer="isha"] .card-bg {
+        background-image: url('https://i.pinimg.com/1200x/be/40/55/be4055d81b248eb6889a9891e2f919f5.jpg');
+        opacity: .30;
+    }
+
+    .card-inner {
+        position: relative;
+        z-index: 1;
+        padding: 2rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1.5rem;
+        flex-wrap: wrap;
+    }
+
+    /* Prayer icon circle */
+    .prayer-icon-wrap {
+        width: 64px;
+        height: 64px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, rgba(201, 168, 76, .12), rgba(201, 168, 76, .22));
+        border: 1px solid var(--gold-border);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        transition: all .4s;
+        box-shadow: 0 0 20px rgba(201, 168, 76, .12);
+    }
+
+    .prayer-big-card:hover .prayer-icon-wrap {
+        background: linear-gradient(135deg, rgba(201, 168, 76, .22), rgba(201, 168, 76, .38));
+        box-shadow: 0 0 30px rgba(201, 168, 76, .30);
+        transform: scale(1.08);
+    }
+
+    .prayer-icon-wrap i {
+        font-size: 1.6rem;
+        color: var(--gold);
+        filter: drop-shadow(0 0 6px rgba(201, 168, 76, .5));
+    }
+
+    /* Prayer info */
+    .prayer-info-col {
+        flex: 1;
+        min-width: 120px;
+    }
+
+    .prayer-name-ar {
+        font-family: 'Amiri', serif;
+        font-size: 1.7rem;
+        font-weight: 700;
+        color: var(--gold-light);
+        text-shadow: 0 0 20px rgba(201, 168, 76, .3);
+        line-height: 1.1;
+        margin-bottom: .3rem;
+    }
+
+    .prayer-name-en {
+        font-size: .72rem;
+        color: var(--text-dim);
+        letter-spacing: 2.5px;
+        text-transform: uppercase;
+    }
+
+    /* Time display */
+    .prayer-time-big {
+        font-family: 'El Messiri', serif;
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: var(--text-bright);
+        letter-spacing: 1px;
+        text-shadow: 0 2px 8px rgba(0, 0, 0, .6);
+        min-width: 120px;
+        text-align: center;
+        transition: color .3s;
+    }
+
+    .prayer-big-card.next-prayer .prayer-time-big {
+        color: var(--gold);
+    }
+
+    /* Status pill */
+    .prayer-status-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: .9rem 2rem;
+        border-top: 1px solid var(--border);
+        position: relative;
+        z-index: 1;
+        flex-wrap: wrap;
+        gap: .8rem;
+    }
+
+    .remaining-pill {
+        font-size: .82rem;
+        color: var(--text-dim);
+        letter-spacing: .3px;
+    }
+
+    .prayer-big-card.next-prayer .remaining-pill {
+        color: var(--gold);
+        font-weight: 600;
+    }
+
+    /* Prayed button */
+    .prayed-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: .45rem;
+        background: rgba(26,18,8,.70);       
+        border: 1px solid rgba(201,146,42,.5); 
+        color: #E8B050;                       
+        padding: .5rem 1.2rem;
+        border-radius: 50px;
+        font-size: .85rem;
+        font-family: 'Tajawal', sans-serif;
+        cursor: pointer;
+        backdrop-filter: blur(4px);            /* ← flou derrière le bouton */
+        transition: all .35s cubic-bezier(.34,1.56,.64,1);
+    }
+    .prayed-btn:hover {
+        background: linear-gradient(135deg, var(--gold-dark), var(--gold));
+        color: #060408;
+        border-color: var(--gold);
+        transform: scale(1.05);
+        box-shadow: 0 6px 20px rgba(201, 168, 76, .35);
+    }
+
+    .prayed-btn.done {
+        background: linear-gradient(135deg, #1a5e30, #27a869);
+        border-color: #27a869;
+        color: #fff;
+        cursor: default;
+        pointer-events: none;
+    }
+
+    .sunrise-note {
+        font-size: .82rem;
+        color: var(--text-dim);
+        font-style: italic;
+    }
+
+    /* "Next prayer" badge */
+    .next-badge {
+        position: absolute;
+        top: 12px;
+        left: 12px;
+        background: linear-gradient(135deg, var(--gold-dark), var(--gold));
+        color: #060408;
+        font-size: .72rem;
+        font-weight: 700;
+        padding: .25rem .75rem;
+        border-radius: 50px;
+        letter-spacing: .5px;
+        font-family: 'El Messiri', serif;
+        box-shadow: 0 2px 10px rgba(201, 168, 76, .4);
+        animation: pulse-badge 2s ease-in-out infinite;
+        z-index: 2;
+        display: none;
+    }
+
+    .prayer-big-card.next-prayer .next-badge {
+        display: block;
+    }
+
+    @keyframes pulse-badge {
+
+        0%,
+        100% {
+            box-shadow: 0 2px 10px rgba(201, 168, 76, .4);
+        }
+
+        50% {
+            box-shadow: 0 2px 20px rgba(201, 168, 76, .7);
+        }
+    }
+
+    /* ── Loading / Error ── */
+    .prayers-loading {
+        text-align: center;
+        padding: 4rem 2rem;
+        background: var(--panel);
+        border: 1px solid var(--border);
+        border-radius: var(--r-lg);
+        backdrop-filter: blur(15px);
+        box-shadow: var(--shadow-card);
+        grid-column: 1/-1;
+    }
+
+    .prayers-loading i {
+        font-size: 3rem;
+        color: var(--gold);
+        display: block;
+        margin-bottom: 1.2rem;
+        animation: spin-glow 1.2s linear infinite;
+    }
+
+    .prayers-error {
+        text-align: center;
+        padding: 3rem 2rem;
+        background: var(--panel);
+        border: 1px solid rgba(220, 80, 80, .3);
+        border-radius: var(--r-lg);
+        backdrop-filter: blur(15px);
+        box-shadow: var(--shadow-card);
+        grid-column: 1/-1;
+    }
+
+    .prayers-error i {
+        font-size: 2.8rem;
+        color: #e74c3c;
+        display: block;
+        margin-bottom: 1rem;
+    }
+
+    .prayers-error h3 {
+        color: #ff6b6b;
+        font-family: 'Amiri', serif;
+        font-size: 1.4rem;
+        margin-bottom: .5rem;
+    }
+
+    /* ── Prayer Progress Tracker ── */
+    .progress-section {
+        margin-top: 3rem;
+        background: var(--panel);
+        border: 1px solid var(--border);
+        border-radius: var(--r-lg);
+        padding: 2rem 2.5rem;
+        backdrop-filter: blur(15px);
+        box-shadow: var(--shadow-card);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .progress-section::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 10%;
+        right: 10%;
+        height: 1px;
+        background: linear-gradient(90deg, transparent, var(--gold), transparent);
+        opacity: .5;
+    }
+
+    .progress-title {
+        font-family: 'Amiri', serif;
+        font-size: 1.35rem;
+        color: var(--gold-light);
+        margin-bottom: 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: .7rem;
+    }
+
+    .progress-title i {
+        color: var(--gold);
+    }
+
+    .progress-bar-wrap {
+        background: rgba(255, 255, 255, .06);
+        border-radius: 50px;
+        height: 10px;
+        overflow: hidden;
+        margin-bottom: .6rem;
+        border: 1px solid var(--border);
+    }
+
+    .progress-bar-fill {
+        height: 100%;
+        background: linear-gradient(90deg, var(--gold-dark), var(--gold), var(--gold-light));
+        border-radius: 50px;
+        transition: width 1s cubic-bezier(.34, 1.56, .64, 1);
+        box-shadow: 0 0 15px rgba(201, 168, 76, .5);
+        position: relative;
+    }
+
+    .progress-bar-fill::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        width: 30px;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, .3));
+        border-radius: 50px;
+        animation: progress-shimmer 2s linear infinite;
+    }
+
+    @keyframes progress-shimmer {
+        0% {
+            opacity: 0;
+        }
+
+        50% {
+            opacity: 1;
+        }
+
+        100% {
+            opacity: 0;
+        }
+    }
+
+    .progress-text {
+        font-size: .88rem;
+        color: var(--text-muted);
+        display: flex;
+        justify-content: space-between;
+        margin-top: .4rem;
+    }
+
+    .progress-text span:last-child {
+        color: var(--gold);
+        font-weight: 600;
+    }
+
+    /* ── Hadith card ── */
+    .hadith-card {
+        margin-top: 3rem;
+        background: var(--panel);
+        border: 1px solid var(--gold-border);
+        border-radius: var(--r-lg);
+        padding: 2.5rem;
+        backdrop-filter: blur(15px);
+        box-shadow: var(--shadow-card), 0 0 30px rgba(201, 168, 76, .05);
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .hadith-card::before {
+        content: '❝';
+        position: absolute;
+        top: 1rem;
+        right: 1.5rem;
+        font-size: 4rem;
+        color: rgba(201, 168, 76, .10);
+        font-family: Georgia, serif;
+        line-height: 1;
+    }
+
+    .hadith-text {
+        font-family: 'Scheherazade New', serif;
+        font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+        color: var(--gold-light);
+        line-height: 2.2;
+        margin-bottom: 1.2rem;
+        text-shadow: 0 0 20px rgba(201, 168, 76, .2);
+    }
+
+    .hadith-source {
+        font-size: .85rem;
+        color: var(--text-dim);
+        letter-spacing: 1px;
+        display: inline-flex;
+        align-items: center;
+        gap: .5rem;
+        background: var(--gold-pale);
+        border: 1px solid var(--gold-border);
+        padding: .35rem 1rem;
+        border-radius: 50px;
+    }
+
+    /* ── Spin glow animation (also used in style.css) ── */
+    @keyframes spin-glow {
+        from {
+            transform: rotate(0deg);
+            filter: drop-shadow(0 0 5px rgba(201, 168, 76, .5))
+        }
+
+        to {
+            transform: rotate(360deg);
+            filter: drop-shadow(0 0 15px rgba(201, 168, 76, .8))
+        }
+    }
+
+    @media (max-width: 600px) {
+        .prayer-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .card-inner {
+            flex-direction: column;
+            text-align: center;
+        }
+
+        .prayer-time-big {
+            min-width: auto;
+        }
+
+        .prayer-status-row {
+            justify-content: center;
+        }
+
+        .date-bar {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .date-badge {
+            justify-content: center;
+        }
+    }
+
+    .prayed-btn.locked {
+        background: rgba(26, 18, 8, .65);
+        border-color: rgba(201, 146, 42, .25);
+        color: rgba(200, 160, 80, .7);
+        cursor: not-allowed;
+        backdrop-filter: blur(4px);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<!-- ══════════════════════════ PAGE HEADER ══════════════════════════ -->
+<div class="page-header">
+    <div class="container">
+        <h1 class="page-title">
+            <i class="fas fa-clock" style="font-size:.75em;margin-left:.4rem;"></i>
+            أوقات الصلاة
+        </h1>
+        <p class="page-description">احصل على أوقات الصلاة الدقيقة حسب موقعك الجغرافي</p>
+    </div>
+</div>
+
+<!-- ══════════════════════════ PRAYERS SECTION ══════════════════════════ -->
+<section class="prayers-section">
+    <div class="container">
+
+        <!-- Date Bar -->
+        <div class="date-bar">
+            <div class="date-badge">
+                <i class="fas fa-calendar-alt"></i>
+                <span id="gregorian-date">جاري التحميل...</span>
+            </div>
+            <div class="date-badge">
+                <i class="fas fa-moon"></i>
+                <span id="hijri-date">جاري التحميل...</span>
+            </div>
+        </div>
+
+        <!-- Location Bar -->
+        <div class="location-bar">
+            <div class="location-details">
+                <i class="fas fa-map-marker-alt"></i>
+                <span id="location-text">يتم تحديد الموقع...</span>
+            </div>
+            <button class="refresh-btn" onclick="refreshLocation()">
+                <i class="fas fa-sync-alt"></i>
+                تحديث الموقع
+            </button>
+        </div>
+
+        <!-- Prayer Cards Grid -->
+        <div class="prayer-grid" id="prayer-times-container">
+
+            <!-- Loading State -->
+            <div class="prayers-loading" id="loading">
+                <i class="fas fa-spinner"></i>
+                <p style="color:var(--text-muted);font-size:1.05rem;">جاري تحميل أوقات الصلاة...</p>
+            </div>
+
+            <!-- Error State (hidden by default) -->
+            <div class="prayers-error" id="error-message" style="display:none;">
+                <i class="fas fa-exclamation-circle"></i>
+                <h3>تعذّر تحميل البيانات</h3>
+                <p id="error-text" style="color:var(--text-muted);margin:.5rem 0 1.2rem;"></p>
+                <button class="prayed-btn" onclick="loadPrayerTimes()">
+                    <i class="fas fa-redo"></i> إعادة المحاولة
+                </button>
+            </div>
+
+        </div>
+
+        <!-- Prayer Progress Tracker -->
+        <div class="progress-section" id="progress-section" style="display:none;">
+            <div class="progress-title">
+                <i class="fas fa-chart-line"></i>
+                تقدّم صلوات اليوم
+            </div>
+            <div class="progress-bar-wrap">
+                <div class="progress-bar-fill" id="progress-fill" style="width:0%"></div>
+            </div>
+            <div class="progress-text">
+                <span id="progress-label">٠ / ٥ صلوات</span>
+                <span id="progress-pct">٠٪</span>
+            </div>
+        </div>
+
+        <!-- Hadith Card -->
+        <div class="hadith-card">
+            <p class="hadith-text">
+                « مَنْ حَافَظَ عَلَيْهَا كَانَتْ لَهُ نُوراً وَبُرْهَاناً وَنَجَاةً يَوْمَ الْقِيَامَةِ »
+            </p>
+            <span class="hadith-source">
+                <i class="fas fa-book"></i>
+                رواه أحمد والطبراني وابن حبان
+            </span>
+        </div>
+
+    </div>
+</section>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // ═══════════════════════════════════════
+    // PRAYER TIMES PAGE — Enhanced JS
+    // ═══════════════════════════════════════
+
+    let userPosition = null;
+    let prayedToday = JSON.parse(localStorage.getItem('prayedToday') || '{}');
+
+    /* ── Prayer meta-data ── */
+    const PRAYERS = [
+        { key: 'Fajr', id: 'fajr', nameAr: 'الفجر', nameEn: 'FAJR', icon: 'fas fa-star-and-crescent', canPray: true },
+        { key: 'Sunrise', id: 'sunrise', nameAr: 'الشروق', nameEn: 'SUNRISE', icon: 'fas fa-sun', canPray: false },
+        { key: 'Dhuhr', id: 'dhuhr', nameAr: 'الظهر', nameEn: 'DHUHR', icon: 'fas fa-cloud-sun', canPray: true },
+        { key: 'Asr', id: 'asr', nameAr: 'العصر', nameEn: 'ASR', icon: 'fas fa-cloud', canPray: true },
+        { key: 'Maghrib', id: 'maghrib', nameAr: 'المغرب', nameEn: 'MAGHRIB', icon: 'fas fa-moon', canPray: true },
+        { key: 'Isha', id: 'isha', nameAr: 'العشاء', nameEn: 'ISHA', icon: 'fas fa-star', canPray: true },
+    ];
+
+    /* Reset prayedToday at midnight */
+    (function () {
+        const today = new Date().toDateString();
+        if (localStorage.getItem('prayedDate') !== today) {
+            prayedToday = {};
+            localStorage.setItem('prayedToday', '{}');
+            localStorage.setItem('prayedDate', today);
+        }
+    })();
+
+    /* ── On load ── */
+    document.addEventListener('DOMContentLoaded', getUserLocation);
+
+    function getUserLocation() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                pos => {
+                    userPosition = pos;
+                    const lat = pos.coords.latitude.toFixed(4);
+                    const lng = pos.coords.longitude.toFixed(4);
+                    document.getElementById('location-text').textContent =
+                        `خط العرض: ${lat}°  |  خط الطول: ${lng}°`;
+                    loadPrayerTimes();
+                },
+                () => {
+                    document.getElementById('location-text').textContent = 'الجزائر (الموقع الافتراضي)';
+                    loadPrayerTimes();
+                }
+            );
+        } else {
+            document.getElementById('location-text').textContent = 'الجزائر (الموقع الافتراضي)';
+            loadPrayerTimes();
+        }
+    }
+
+    function refreshLocation() {
+        const icon = document.querySelector('.refresh-btn i');
+        icon.style.animation = 'spin-glow .6s linear 1';
+        setTimeout(() => { icon.style.animation = ''; }, 700);
+        getUserLocation();
+    }
+
+    function loadPrayerTimes() {
+        showLoading();
+        const lat = userPosition ? userPosition.coords.latitude : '36.8065';
+        const lng = userPosition ? userPosition.coords.longitude : '3.0528';
+
+        fetch(`/api/prayer-times?lat=${lat}&lng=${lng}`)
+            .then(r => r.json())
+            .then(data => {
+                if (data.success) {
+                    renderDates(data);
+                    renderCards(data.timings);
+                    renderProgress();
+                    document.getElementById('progress-section').style.display = 'block';
+                } else {
+                    showError(data.message || 'خطأ غير معروف');
+                }
+            })
+            .catch(() => showError('تعذّر الاتصال بالخادم'));
+    }
+
+    /* ── Render dates ── */
+    function renderDates(data) {
+        document.getElementById('gregorian-date').textContent = data.date;
+        document.getElementById('hijri-date').textContent = data.hijri;
+    }
+
+    /* ── Find next prayer ── */
+    function findNextPrayer(timings) {
+        const now = new Date();
+        const nowMs = now.getHours() * 3600000 + now.getMinutes() * 60000;
+        let nextKey = null, minDiff = Infinity;
+        PRAYERS.filter(p => p.canPray).forEach(p => {
+            const t = timings[p.key];
+            if (!t) return;
+            const ms = timeStrToMs(t);
+            const diff = ms - nowMs;
+            const d = diff < 0 ? diff + 86400000 : diff;
+            if (d < minDiff) { minDiff = d; nextKey = p.key; }
+        });
+        return nextKey;
+    }
+
+    function timeStrToMs(str) {
+        const [time, mod] = str.trim().split(' ');
+        let [h, m] = time.split(':').map(Number);
+        if (mod === 'PM' && h !== 12) h += 12;
+        if (mod === 'AM' && h === 12) h = 0;
+        return (h * 3600 + m * 60) * 1000;
+    }
+
+    function msToRemainingAr(ms) {
+        const totalMin = Math.floor(ms / 60000);
+        const h = Math.floor(totalMin / 60);
+        const m = totalMin % 60;
+        if (h > 0) return `متبقي ${h} ساعة ${m > 0 ? `و ${m} دقيقة` : ''}`;
+        return `متبقي ${m} دقيقة`;
+    }
+
+    /* ── Render cards ── */
+    function renderCards(timings) {
+        const container = document.getElementById('prayer-times-container');
+        container.innerHTML = '';
+
+        const nextKey = findNextPrayer(timings);
+        const now = new Date();
+        const nowMs = now.getHours() * 3600000 + now.getMinutes() * 60000;
+
+        PRAYERS.forEach(p => {
+            const time = timings[p.key] || '--:--';
+            const isNext = p.key === nextKey;
+            const prayerMs = timeStrToMs(time);
+            let remainText = '';
+            if (!p.canPray) {
+                remainText = 'وقت انتهاء صلاة الفجر';
+            } else {
+                const diff = prayerMs - nowMs;
+                if (diff < 0) { remainText = 'انتهى وقتها'; }
+                else { remainText = msToRemainingAr(diff); }
+            }
+
+            const card = document.createElement('div');
+            card.className = `prayer-big-card${isNext ? ' next-prayer' : ''}`;
+            card.setAttribute('data-prayer', p.id);
+
+            const isDone = prayedToday[p.id];
+            const isPast = prayerMs <= nowMs;
+
+            card.innerHTML = `
+            <div class="card-bg"></div>
+            ${isNext ? '<div class="next-badge"> الصلاة القادمة</div>' : ''}
+
+            <div class="card-inner">
+                <div class="prayer-icon-wrap">
+                    <i class="${p.icon}"></i>
+                </div>
+                <div class="prayer-info-col">
+                    <div class="prayer-name-ar">${p.nameAr}</div>
+                    <div class="prayer-name-en">${p.nameEn}</div>
+                </div>
+                <div class="prayer-time-big" id="time-${p.id}">${time}</div>
+            </div>
+
+            <div class="prayer-status-row">
+                <span class="remaining-pill" id="remain-${p.id}">${remainText}</span>
+                ${p.canPray
+                    ? `<button class="prayed-btn ${isDone ? 'done' : ''} ${!isPast && !isDone ? 'locked' : ''}"
+                    id="btn-${p.id}"
+                    onclick="markPrayed('${p.id}')"
+                    ${isDone || !isPast ? 'disabled' : ''}>
+                    <i class="fas ${isDone ? 'fa-check-circle' : !isPast ? 'fa-lock' : 'fa-check'}"></i>
+                    ${isDone ? 'تمّت الصلاة ✓' : !isPast ? 'لم يحن الوقت' : 'تمت الصلاة'}
+                  </button>`
+                    : ``
+                }
+            </div>
+        `;
+
+            container.appendChild(card);
+        });
+
+        // Animate cards in
+        container.querySelectorAll('.prayer-big-card').forEach((card, i) => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(30px)';
+            card.style.transition = 'opacity .5s ease, transform .5s ease';
+            setTimeout(() => {
+                card.style.opacity = '1';
+                card.style.transform = 'translateY(0)';
+            }, 80 * i);
+        });
+
+        // Live countdown every minute
+        setInterval(() => updateCountdowns(timings), 60000);
+    }
+
+    function updateCountdowns(timings) {
+        const now = new Date();
+        const nowMs = now.getHours() * 3600000 + now.getMinutes() * 60000;
+        const nextKey = findNextPrayer(timings);
+
+        PRAYERS.forEach(p => {
+            const el = document.getElementById(`remain-${p.id}`);
+            const card = document.querySelector(`[data-prayer="${p.id}"]`);
+            if (!el || !p.canPray) return;
+
+            const t = timings[p.key];
+            if (!t) return;
+
+            const prayerMs = timeStrToMs(t);
+            const diff = prayerMs - nowMs;
+
+            if (diff < 0) { el.textContent = 'انتهى وقتها'; }
+            else { el.textContent = msToRemainingAr(diff); }
+
+            if (card) {
+                card.classList.toggle('next-prayer', p.key === nextKey);
+            }
+        });
+    }
+
+    /* ── Mark prayed ── */
+    function markPrayed(id) {
+        prayedToday[id] = true;
+        localStorage.setItem('prayedToday', JSON.stringify(prayedToday));
+
+        const btn = document.getElementById(`btn-${id}`);
+        if (btn) {
+            btn.classList.add('done');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-check-circle"></i> تمّت الصلاة ✓';
+            btn.style.transform = 'scale(1.05)';
+            setTimeout(() => { btn.style.transform = ''; }, 300);
+        }
+
+        renderProgress();
+        showToast(`جزاك الله خيراً — ${getPrayerNameAr(id)}`);
+    }
+
+    function getPrayerNameAr(id) {
+        return PRAYERS.find(p => p.id === id)?.nameAr || id;
+    }
+
+    /* ── Progress bar ── */
+    function renderProgress() {
+        const prayable = PRAYERS.filter(p => p.canPray);
+        const done = prayable.filter(p => prayedToday[p.id]).length;
+        const pct = Math.round((done / prayable.length) * 100);
+
+        document.getElementById('progress-fill').style.width = pct + '%';
+        document.getElementById('progress-pct').textContent = pct + '٪';
+        document.getElementById('progress-label').textContent = `${done} / ${prayable.length} صلوات`;
+    }
+
+    /* ── Toast notification ── */
+    function showToast(msg) {
+        let toast = document.getElementById('prayer-toast');
+        if (!toast) {
+            toast = document.createElement('div');
+            toast.id = 'prayer-toast';
+            toast.style.cssText = `
+            position:fixed; bottom:2rem; left:50%; transform:translateX(-50%) translateY(80px);
+            background:var(--panel2); border:1px solid var(--gold-border);
+            color:var(--gold-light); padding:.85rem 2rem; border-radius:50px;
+            font-family:'El Messiri',serif; font-size:.95rem;
+            box-shadow:0 8px 30px rgba(0,0,0,.5),0 0 0 1px rgba(201,168,76,.25);
+            backdrop-filter:blur(20px); z-index:9000;
+            transition:transform .4s cubic-bezier(.34,1.56,.64,1), opacity .3s ease;
+            opacity:0; white-space:nowrap;
+        `;
+            document.body.appendChild(toast);
+        }
+        toast.textContent = '✦  ' + msg + '  ✦';
+        toast.style.transform = 'translateX(-50%) translateY(0)';
+        toast.style.opacity = '1';
+        clearTimeout(toast._t);
+        toast._t = setTimeout(() => {
+            toast.style.transform = 'translateX(-50%) translateY(80px)';
+            toast.style.opacity = '0';
+        }, 3000);
+    }
+
+    /* ── Loading / Error helpers ── */
+    function showLoading() {
+        document.getElementById('loading').style.display = 'block';
+        document.getElementById('error-message').style.display = 'none';
+        // Remove old cards
+        document.querySelectorAll('.prayer-big-card').forEach(c => c.remove());
+    }
+
+    function showError(msg) {
+        document.getElementById('loading').style.display = 'none';
+        document.getElementById('error-message').style.display = 'block';
+        document.getElementById('error-text').textContent = msg;
+    }
+</script>
+{% endblock %}

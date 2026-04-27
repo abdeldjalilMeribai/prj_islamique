@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>{% block title %}سبيل المسلم{% endblock %}</title>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Playfair+Display:wght@600;700;800&family=Tajawal:wght@300;400;500;700&family=Scheherazade+New:wght@400;500;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='praying.png') }}">
+    {% block extra_css %}{% endblock %}
+</head>
+
+<body>
+
+    <!-- ══════════════════════════════════════
+     HEADER
+══════════════════════════════════════ -->
+    <header>
+        <div class="header-content">
+            <a href="{{ url_for('index') }}" class="logo">
+
+                <!-- ═══ LOGO ANIMÉ — Mosquée Hexagone ═══ -->
+                <svg viewBox="0 0 56 56" width="52" height="52" style="flex-shrink:0;overflow:visible;">
+                    <defs>
+                        <linearGradient id="lgold" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="0%" stop-color="#FFE08A" />
+                            <stop offset="50%" stop-color="#C9922A" />
+                            <stop offset="100%" stop-color="#9B6E18" />
+                        </linearGradient>
+                    </defs>
+
+                    <style>
+                        /* Anneau extérieur qui tourne lentement */
+                        .logo-ring {
+                            transform-origin: 28px 28px;
+                            animation: logo-spin 12s linear infinite;
+                        }
+
+                        /* Hexagone qui pulse doucement */
+                        .logo-hex {
+                            transform-origin: 28px 28px;
+                            animation: logo-pulse 3s ease-in-out infinite;
+                        }
+
+                        /* Mosquée qui flotte */
+                        .logo-mosque {
+                            animation: logo-float 3s ease-in-out infinite;
+                        }
+
+                        /* Point doré en haut qui clignote */
+                        .logo-dot {
+                            animation: logo-blink 2s ease-in-out infinite;
+                        }
+
+                        @keyframes logo-spin {
+                            from {
+                                transform: rotate(0deg);
+                            }
+
+                            to {
+                                transform: rotate(360deg);
+                            }
+                        }
+
+                        @keyframes logo-pulse {
+
+                            0%,
+                            100% {
+                                transform: scale(1);
+                            }
+
+                            50% {
+                                transform: scale(1.04);
+                            }
+                        }
+
+                        @keyframes logo-float {
+
+                            0%,
+                            100% {
+                                transform: translateY(0px);
+                            }
+
+                            50% {
+                                transform: translateY(-1.5px);
+                            }
+                        }
+
+                        @keyframes logo-blink {
+
+                            0%,
+                            100% {
+                                opacity: 1;
+                            }
+
+                            50% {
+                                opacity: 0.4;
+                            }
+                        }
+                    </style>
+
+                    <!-- Anneau tournant avec tirets -->
+                    <g class="logo-ring">
+                        <circle cx="28" cy="28" r="26" fill="none" stroke="#C9922A" stroke-width="0.8"
+                            stroke-dasharray="4 3" opacity="0.5" />
+                        <!-- 4 points cardinaux sur l'anneau -->
+                        <circle cx="28" cy="2" r="1.8" fill="#E8B050" />
+                        <circle cx="28" cy="54" r="1.8" fill="#E8B050" />
+                        <circle cx="2" cy="28" r="1.8" fill="#E8B050" />
+                        <circle cx="54" cy="28" r="1.8" fill="#E8B050" />
+                    </g>
+
+                    <!-- Hexagone principal qui pulse -->
+                    <g class="logo-hex">
+                        <!-- Hexagone fond sombre -->
+                        <polygon points="28,5 49,16.5 49,39.5 28,51 7,39.5 7,16.5" fill="#1A1208" stroke="url(#lgold)"
+                            stroke-width="1.4" />
+                        <!-- Hexagone intérieur décoratif -->
+                        <polygon points="28,9 45,19 45,37 28,47 11,37 11,19" fill="none" stroke="#C9922A"
+                            stroke-width="0.5" opacity="0.35" />
+                    </g>
+
+                    <!-- Mosquée qui flotte -->
+                    <g class="logo-mosque">
+                        <!-- Minaret gauche -->
+                        <rect x="11" y="28" width="5" height="14" rx="1" fill="url(#lgold)" />
+                        <ellipse cx="13.5" cy="27.5" rx="3.5" ry="4.5" fill="url(#lgold)" />
+                        <line x1="13.5" y1="23" x2="13.5" y2="19" stroke="#E8B050" stroke-width="1.2"
+                            stroke-linecap="round" />
+                        <circle cx="13.5" cy="18.5" r="1.2" fill="#E8B050" />
+
+                        <!-- Minaret droit -->
+                        <rect x="40" y="28" width="5" height="14" rx="1" fill="url(#lgold)" />
+                        <ellipse cx="42.5" cy="27.5" rx="3.5" ry="4.5" fill="url(#lgold)" />
+                        <line x1="42.5" y1="23" x2="42.5" y2="19" stroke="#E8B050" stroke-width="1.2"
+                            stroke-linecap="round" />
+                        <circle cx="42.5" cy="18.5" r="1.2" fill="#E8B050" />
+
+                        <!-- Dôme central -->
+                        <ellipse cx="28" cy="22" rx="10" ry="7" fill="url(#lgold)" />
+                        <!-- Corps principal -->
+                        <rect x="18" y="29" width="20" height="13" rx="1" fill="url(#lgold)" />
+                        <!-- Arches (découpes sombres) -->
+                        <path d="M19,42 Q22.5,33 26,42 Q29.5,33 33,42 Q36.5,33 37,42Z" fill="#1A1208" />
+                        <!-- Pointe centrale du dôme -->
+                        <line x1="28" y1="15" x2="28" y2="10" stroke="#E8B050" stroke-width="1.5"
+                            stroke-linecap="round" />
+                        <circle cx="28" cy="9.5" r="1.8" fill="#E8B050" class="logo-dot" />
+                    </g>
+
+                </svg>
+                <!-- ═══ FIN LOGO ═══ -->
+
+                <div class="logo-text">
+                    <h1>سبيل المسلم</h1>
+                    <p>PRAYER TRACKER</p>
+                </div>
+
+            </a>
+
+            <button class="nav-toggle" id="navToggle" aria-label="القائمة">
+                <i class="fas fa-bars" id="navIcon"></i>
+            </button>
+
+            <nav id="mainNav">
+                <ul>
+                    <li><a href="{{ url_for('index') }}"><i class="fas fa-home"></i> الرئيسية</a></li>
+                    <li><a href="{{ url_for('prayers') }}"><i class="fas fa-clock"></i> أوقات الصلاة</a></li>
+                    <li><a href="{{ url_for('qibla') }}"><i class="fas fa-compass"></i> القبلة</a></li>
+                    <li><a href="{{ url_for('reminders') }}"><i class="fas fa-hand-holding-heart"></i> أذكار الصلاة</a>
+                    </li>
+                    <li><a href="{{ url_for('couran') }}"><i class="fas fa-book-open"></i> القرآن</a></li>
+                    <li><a href="{{ url_for('adhkar') }}"><i class="fas fa-moon"></i> حصن المسلم</a></li>
+                </ul>
+            </nav>
+
+        </div>
+    </header>
+
+    <!-- ══════════════════════════════════════
+     MAIN
+══════════════════════════════════════ -->
+    <main>
+        {% block content %}
+
+        <!-- ══════════════ HERO ══════════════ -->
+        <section class="hero">
+
+            <!-- bg handled by ::before in CSS -->
+
+            <div class="hero-content">
+                <span class="hero-allah">لا إله إلا الله</span>
+
+                <h2>
+                    « وَأَقِيمُوا الصَّلَاةَ<br>
+                    وَآتُوا الزَّكَاةَ »
+                </h2>
+
+                <p>حافظ على صلواتك في أوقاتها — أداة رقمية متكاملة للمسلم</p>
+
+                <div
+                    style="display:flex;gap:1.2rem;justify-content:center;flex-wrap:wrap;animation:fade-in-down 1s .7s both;">
+                </div>
+            </div>
+
+            <!-- Scroll hint -->
+            <div class="scroll-hint">
+                <span>اكتشف المزيد</span>
+                <i class="fas fa-chevron-down"></i>
+            </div>
+
+        </section>
+
+        <div class="gold-line"></div>
+
+        <!-- ══════════════ PRAYER TIMES + WELCOME ══════════════ -->
+        <div class="split-section">
+
+            <!-- LEFT — Amber prayer times -->
+            <div class="prayer-times-panel">
+                <span class="allah-label" style="text-align:right;color:rgba(255,255,255,.7);">اللهم صلِّ وسلم وبارك على
+                    نبينا محمد</span>
+                <h2 class="prayer-panel-title">PRAYER TIMES</h2>
+                <p class="prayer-location-label" id="split-location">يتم تحديد موقعك...</p>
+
+                <div id="split-prayer-rows">
+                    <!-- injected by JS -->
+                    <div style="text-align:center;padding:2rem 0;color:rgba(255,255,255,.6);">
+                        <i class="fas fa-spinner" style="animation:spin .9s linear infinite;font-size:1.5rem;"></i>
+                    </div>
+                </div>
+
+                <p class="prayer-panel-footer">Powered by Aladhan API</p>
+            </div>
+
+            <!-- RIGHT — Welcome white -->
+            <div class="welcome-panel">
+                <span class="allah-label" style="text-align:right;">الله المستعان</span>
+                <h2 class="welcome-title">مرحباً بك في<br>سبيل المسلم</h2>
+                <p class="welcome-text">
+                    سبيل المسلم هو تطبيق رقمي متكامل مخصص لمساعدة المسلمين على المحافظة على الصلوات في أوقاتها.
+                    يوفر أوقات الصلاة الدقيقة حسب موقعك، بوصلة القبلة، أذكار ما بعد الصلاة، حصن المسلم، والقرآن الكريم.
+                </p>
+                <a href="{{ url_for('prayers') }}" class="btn">
+                    اكتشف المزيد
+                    <i class="fas fa-arrow-left"></i>
+                </a>
+            </div>
+
+        </div>
+
+        <div class="gold-line"
+            style="background:linear-gradient(90deg,transparent,var(--amber),var(--amber-light),var(--amber),transparent);">
+        </div>
+
+        <!-- ══════════════ PHILOSOPHY ══════════════ -->
+        <section class="philosophy-section">
+            <div class="container">
+                <span class="allah-label">الله أكبر</span>
+                <h2 class="section-title">OUR PHILOSOPHY</h2>
+                <p class="section-subtitle">أربع قيم تشكّل جوهر حياة المسلم</p>
+
+                <div class="philosophy-grid">
+                    <div class="philosophy-card">
+                        <div class="phil-icon"><i class="fas fa-book-open"></i></div>
+                        <div class="phil-title">العلم</div>
+                        <p class="phil-text">طلب العلم فريضة على كل مسلم — الركيزة الأساسية في رحلة المؤمن</p>
+                    </div>
+                    <div class="philosophy-card">
+                        <div class="phil-icon"><i class="fas fa-star-and-crescent"></i></div>
+                        <div class="phil-title">الإحسان</div>
+                        <p class="phil-text">الإحسان كان منهج نبينا ﷺ — أن تعبد الله كأنك تراه</p>
+                    </div>
+                    <div class="philosophy-card">
+                        <div class="phil-icon"><i class="fas fa-users"></i></div>
+                        <div class="phil-title">الجماعة</div>
+                        <p class="phil-text">نصلي سوياً ونُفطر سوياً — الإسلام دين المجتمع والتكافل</p>
+                    </div>
+                    <div class="philosophy-card">
+                        <div class="phil-icon"><i class="fas fa-hands-helping"></i></div>
+                        <div class="phil-title">الخدمة</div>
+                        <p class="phil-text">خير الناس أنفعهم للناس — الخدمة واجب على كل مسلم</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="gold-line"></div>
+
+        <!-- ══════════════ STATS ══════════════ -->
+        <div class="stats-strip">
+            <div class="container">
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-number">٥</div>
+                        <div class="stat-label">Daily Prayers</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">١٧</div>
+                        <div class="stat-label">Daily Adkar</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">١١٤</div>
+                        <div class="stat-label">Surahs</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">٣٦٠°</div>
+                        <div class="stat-label">Qibla Accuracy</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ══════════════ FEATURES ══════════════ -->
+        <section class="features" style="background:var(--cream);">
+            <div class="container">
+                <span class="allah-label">السجود لله هو قمة الارتقاء وذروة القرب من الخالق</span>
+                <h2 class="section-title">مميزات التطبيق</h2>
+                <p class="section-subtitle">كل ما يحتاجه المسلم في مكان واحد</p>
+
+                <div class="features-grid">
+
+                    <div class="feature-card">
+                        <div class="feature-card-img-wrap">
+                            <img class="feature-card-img"
+                                src="https://i.pinimg.com/736x/27/80/f1/2780f101b7a4e6e79ac02d628a771963.jpg"
+                                alt="أوقات الصلاة" loading="lazy" onerror="this.parentElement.style.display='none'">
+                        </div>
+                        <div class="feature-card-body">
+                            <div class="feature-icon"><i class="fas fa-clock"></i></div>
+                            <h3>أوقات الصلاة</h3>
+                            <p>أوقات دقيقة حسب موقعك الجغرافي مع تنبيهات صوتية بالأذان</p>
+                        </div>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-card-img-wrap">
+                            <img class="feature-card-img"
+                                src="https://i.pinimg.com/736x/22/2e/0c/222e0ca7338430e55191b0996870f21f.jpg"
+                                alt="أذكار وتسبيح" loading="lazy" onerror="this.parentElement.style.display='none'">
+                        </div>
+                        <div class="feature-card-body">
+                            <div class="feature-icon"><i class="fas fa-hand-holding-heart"></i></div>
+                            <h3>أذكار وتسبيح</h3>
+                            <p>أذكار ما بعد الصلاة وحصن المسلم الكامل مع عداد التسبيح</p>
+                        </div>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-card-img-wrap">
+                            <img class="feature-card-img"
+                                src="https://i.pinimg.com/736x/ea/b0/c1/eab0c10f1bb88dd274b95440c5eec1ff.jpg"
+                                alt="بوصلة القبلة" loading="lazy" onerror="this.parentElement.style.display='none'">
+                        </div>
+                        <div class="feature-card-body">
+                            <div class="feature-icon"><i class="fas fa-compass"></i></div>
+                            <h3>بوصلة القبلة</h3>
+                            <p>اتجاه القبلة من أي مكان في العالم بدقة متناهية</p>
+                        </div>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-card-img-wrap">
+                            <img class="feature-card-img"
+                                src="https://i.pinimg.com/736x/90/b7/8f/90b78ff7e1c29820b01604a29f7b34c1.jpg"
+                                alt="القرآن الكريم" loading="lazy" onerror="this.parentElement.style.display='none'">
+                        </div>
+                        <div class="feature-card-body">
+                            <div class="feature-icon"><i class="fas fa-book-open"></i></div>
+                            <h3>القرآن الكريم</h3>
+                            <p>اقرأ القرآن الكريم واستمع لأفضل القراء العالميين</p>
+                        </div>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-card-img-wrap">
+                            <img class="feature-card-img"
+                                src="https://i.pinimg.com/736x/fb/3f/9a/fb3f9a7c4f95a702ebb3ebdd1acafb16.jpg"
+                                alt="حصن المسلم" loading="lazy" onerror="this.parentElement.style.display='none'">
+                        </div>
+                        <div class="feature-card-body">
+                            <div class="feature-icon"><i class="fas fa-moon"></i></div>
+                            <h3>حصن المسلم</h3>
+                            <p>أذكار الصباح والمساء والنوم والاستيقاظ من السنة النبوية</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ══════════════ VERSE BANNER ══════════════ -->
+        <div class="verse-banner">
+            <div class="verse-content">
+                <span class="allah-label" style="color:var(--amber-light);">الله</span>
+                <div class="verse-arabic">
+                    حَافِظُوا عَلَى الصَّلَوَاتِ وَالصَّلَاةِ الْوُسْطَىٰ<br>
+                    وَقُومُوا لِلَّهِ قَانِتِينَ
+                </div>
+                <span class="verse-ref">
+                    <i class="fas fa-book-open"></i>
+                    سورة البقرة — الآية ٢٣٨
+                </span>
+            </div>
+        </div>
+
+        <!-- Home prayer times full section (kept for script.js compatibility) -->
+        <section style="display:none;">
+            <div class="prayer-cards" id="home-prayer-times"></div>
+        </section>
+
+        {% endblock %}
+    </main>
+
+    <!-- ══════════════════════════════════════
+     FOOTER
+══════════════════════════════════════ -->
+    <div class="gold-line"></div>
+    <footer>
+        <div class="container">
+
+            <!-- Footer logo -->
+            <div
+                style="text-align:center;margin-bottom:3rem;padding-bottom:2.5rem;border-bottom:1px solid rgba(201,146,42,.15);position:relative;">
+                <div style="display:inline-flex;align-items:center;gap:.9rem;margin-bottom:.7rem;">
+                    <i class="fas fa-mosque" style="font-size:1.8rem;color:var(--amber);"></i>
+                    <span
+                        style="font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:700;color:var(--white);text-transform:uppercase;letter-spacing:2px;">سبيل
+                        المسلم</span>
+                </div>
+                <p style="font-size:.62rem;color:rgba(255,255,255,.3);letter-spacing:4px;">PRAYER TRACKER</p>
+            </div>
+
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>عن التطبيق</h3>
+                    <p>رفيقُك في المحافظة على الصلاة، ودليلُك إلى الذكر والتلاوة، وأنيسُك في كل وقت وحال.</p>
+                    <div style="margin-top:1.2rem;color:var(--amber);font-size:.9rem;letter-spacing:4px;">★ ★ ★ ★ ★
+                    </div>
+                </div>
+
+                <div class="footer-section">
+                    <h3>روابط سريعة</h3>
+                    <ul class="footer-links">
+                        <li><a href="{{ url_for('index') }}">الرئيسية</a></li>
+                        <li><a href="{{ url_for('prayers') }}">أوقات الصلاة</a></li>
+                        <li><a href="{{ url_for('qibla') }}">اتجاه القبلة</a></li>
+                        <li><a href="{{ url_for('reminders') }}">أذكار ما بعد الصلاة</a></li>
+                        <li><a href="{{ url_for('couran') }}">القرآن الكريم</a></li>
+                        <li><a href="{{ url_for('adhkar') }}">حصن المسلم</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h3>اتصل بنا</h3>
+                    <p><i class="fas fa-envelope"></i> meribai.abdeldjalil@gmail.com</p>
+                    <p style="margin-top:.6rem;"><i class="fas fa-phone"></i> 0540183583</p>
+                    <p style="margin-top:.6rem;"><i class="fas fa-map-marker-alt"></i> الجزائر</p>
+                    <div class="social-icons">
+                        <a href="#" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;"
+                            title="العودة للأعلى">
+                            <i class="fas fa-arrow-up"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                &copy; 2025 سبيل المسلم — جميع الحقوق محفوظة
+            </div>
+        </div>
+    </footer>
+
+    <!-- ══════════════════════════════════════
+     SCRIPTS
+══════════════════════════════════════ -->
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+
+    <script>
+        // ── Mobile nav ──
+        const navToggle = document.getElementById('navToggle');
+        const mainNav = document.getElementById('mainNav');
+        const navIcon = document.getElementById('navIcon');
+        navToggle.addEventListener('click', () => {
+            mainNav.classList.toggle('open');
+            navIcon.className = mainNav.classList.contains('open') ? 'fas fa-times' : 'fas fa-bars';
+        });
+        mainNav.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+            mainNav.classList.remove('open');
+            navIcon.className = 'fas fa-bars';
+        }));
+
+        // ── Active link ──
+        (function () {
+            const p = window.location.pathname;
+            document.querySelectorAll('nav a').forEach(a => {
+                if (a.getAttribute('href') === p || (p === '/' && a.getAttribute('href') === '/')) a.classList.add('active');
+            });
+        })();
+
+        // ── Load prayer times into split panel ──
+        document.addEventListener('DOMContentLoaded', () => {
+            const names = { Fajr: 'الفجر', Sunrise: 'الشروق', Dhuhr: 'الظهر', Asr: 'العصر', Maghrib: 'المغرب', Isha: 'العشاء' };
+            const order = ['Fajr', 'Sunrise', 'Dhuhr', 'Asr', 'Maghrib', 'Isha'];
+
+            function timeToMs(str) {
+                const [t, mod] = str.trim().split(' ');
+                let [h, m] = t.split(':').map(Number);
+                if (mod === 'PM' && h !== 12) h += 12;
+                if (mod === 'AM' && h === 12) h = 0;
+                return (h * 60 + m) * 60000;
+            }
+
+            function loadSplitPanel() {
+                const cb = pos => {
+                    const lat = pos ? pos.coords.latitude : 36.8065;
+                    const lng = pos ? pos.coords.longitude : 3.0528;
+                    if (pos) document.getElementById('split-location').textContent =
+                        `خط العرض ${lat.toFixed(2)}° — خط الطول ${lng.toFixed(2)}°`;
+
+                    fetch(`/api/prayer-times?lat=${lat}&lng=${lng}`)
+                        .then(r => r.json())
+                        .then(data => {
+                            if (!data.success) return;
+                            const now = Date.now() % 86400000 - (new Date().getTimezoneOffset() * 60000);
+                            const nowMs = (new Date().getHours() * 60 + new Date().getMinutes()) * 60000;
+
+                            let nextPrayer = null;
+                            let minDiff = Infinity;
+                            order.filter(k => k !== 'Sunrise').forEach(k => {
+                                if (!data.timings[k]) return;
+                                const ms = timeToMs(data.timings[k]);
+                                const diff = ms > nowMs ? ms - nowMs : ms + 86400000 - nowMs;
+                                if (diff < minDiff) { minDiff = diff; nextPrayer = k; }
+                            });
+
+                            const rows = document.getElementById('split-prayer-rows');
+                            rows.innerHTML = order.map(k => {
+                                if (!data.timings[k]) return '';
+                                const isNext = k === nextPrayer;
+                                return `<div class="prayer-row${isNext ? ' next-up' : ''}">
+                            <span class="prayer-row-name">${names[k]}</span>
+                            <span class="prayer-row-time">${data.timings[k]}</span>
+                        </div>`;
+                            }).join('');
+                        })
+                        .catch(() => {
+                            document.getElementById('split-prayer-rows').innerHTML =
+                                '<p style="color:rgba(255,255,255,.5);text-align:center;padding:1rem;">تعذّر التحميل</p>';
+                        });
+                };
+
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(cb, () => cb(null));
+                } else cb(null);
+            }
+
+            loadSplitPanel();
+
+            // ── Entrance animations ──
+            const io = new IntersectionObserver(entries => {
+                entries.forEach((e, i) => {
+                    if (e.isIntersecting) {
+                        e.target.style.transitionDelay = `${i * 0.07}s`;
+                        e.target.style.opacity = '1';
+                        e.target.style.transform = 'translateY(0)';
+                        io.unobserve(e.target);
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            document.querySelectorAll('.feature-card, .philosophy-card, .stat-item').forEach(el => {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(24px)';
+                el.style.transition = 'opacity .5s ease, transform .5s ease';
+                io.observe(el);
+            });
+        });
+    </script>
+
+    {% block extra_js %}{% endblock %}
+
+</body>
+
+</html>

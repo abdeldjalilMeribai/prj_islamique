@@ -1,0 +1,1161 @@
+{% extends "base.html" %}
+
+{% block title %}حصن المسلم - أذكار الصباح والمساء{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* ═══════════════════════════════════════════════
+   ADHKAR (HISN AL-MUSLIM) PAGE — Premium Redesign
+═══════════════════════════════════════════════ */
+
+    /* ── Page header — DESKTOP FULL HERO (Architecture islamique nuit) ── */
+/* ── MOBILE : ton image originale (inchangée) ── */
+.page-header::before {
+    background:
+        linear-gradient(180deg,
+            rgba(4, 4, 13, .45) 0%,
+            rgba(4, 4, 13, .20) 40%,
+            rgba(4, 4, 13, .92) 100%),
+        url('https://i.pinimg.com/736x/97/6d/4a/976d4a4c90ae09033e4ebcd43244fe87.jpg') center 50% / cover no-repeat;
+}
+
+/* ── DESKTOP uniquement : nouvelle image paysage ── */
+@media (min-width: 768px) {
+    .page-header::before {
+        background:
+            linear-gradient(180deg,
+                rgba(4, 4, 13, .42) 0%,
+                rgba(4, 4, 13, .08) 38%,
+                rgba(4, 4, 13, .90) 100%),
+            url('static/images/6.jpg') center 30% / cover no-repeat !important;
+    }
+}
+    /* ── Section ── */
+    .hisn-section {
+        padding: 2.5rem 0 5rem;
+        position: relative;
+        z-index: 1;
+    }
+
+    /* ══════════════════════════════════════
+   CATEGORY SELECTOR — Premium Tabs
+══════════════════════════════════════ */
+    .category-tabs {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 1.2rem;
+        margin-bottom: 3rem;
+    }
+
+    @media (max-width: 700px) {
+        .category-tabs {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+    @media (max-width: 380px) {
+        .category-tabs {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    .cat-tab {
+        background: var(--panel);
+        border: 1.5px solid var(--border);
+        border-radius: var(--r-lg);
+        padding: 1.5rem 1rem;
+        cursor: pointer;
+        transition: all .4s cubic-bezier(.34, 1.56, .64, 1);
+        font-family: 'El Messiri', serif;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: .65rem;
+        backdrop-filter: blur(15px);
+        box-shadow: var(--shadow-card);
+        position: relative;
+        overflow: hidden;
+        text-align: center;
+    }
+
+    /* Top glow line */
+    .cat-tab::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: linear-gradient(90deg, transparent, var(--gold), transparent);
+        opacity: 0;
+        transition: opacity .4s;
+    }
+
+    /* Background image per category */
+    .cat-tab::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background-size: cover;
+        background-position: center;
+        opacity: 0;
+        transition: opacity .5s;
+        z-index: 0;
+    }
+
+    .cat-tab[data-category="morning"]::after {
+        background-image: url('');
+    }
+
+    .cat-tab[data-category="evening"]::after {
+        background-image: url('');
+    }
+
+    .cat-tab[data-category="sleep"]::after {
+        background-image: url('');
+    }
+
+    .cat-tab[data-category="wakeup"]::after {
+        background-image: url('');
+    }
+
+    .cat-tab:hover::after,
+    .cat-tab.active::after {
+        opacity: .10;
+    }
+
+    .cat-tab:hover::before,
+    .cat-tab.active::before {
+        opacity: 1;
+    }
+
+    .cat-tab-inner {
+        position: relative;
+        z-index: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: .65rem;
+    }
+
+    .cat-icon {
+        width: 58px;
+        height: 58px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, rgba(201, 168, 76, .08), rgba(201, 168, 76, .18));
+        border: 1px solid rgba(201, 168, 76, .25);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all .4s;
+    }
+
+    .cat-icon i {
+        font-size: 1.5rem;
+        color: var(--gold-dark);
+        transition: all .4s;
+    }
+
+    .cat-label {
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--text-muted);
+        transition: color .3s;
+    }
+
+    .cat-count-badge {
+        font-size: .72rem;
+        color: var(--text-dim);
+        background: rgba(201, 168, 76, .07);
+        border: 1px solid rgba(201, 168, 76, .12);
+        padding: .15rem .6rem;
+        border-radius: 50px;
+        letter-spacing: .3px;
+        transition: all .3s;
+    }
+
+    .cat-tab:hover .cat-label {
+        color: var(--gold-light);
+    }
+
+    .cat-tab:hover .cat-icon {
+        background: linear-gradient(135deg, rgba(201, 168, 76, .18), rgba(201, 168, 76, .30));
+        box-shadow: 0 0 20px rgba(201, 168, 76, .20);
+    }
+
+    .cat-tab:hover .cat-icon i {
+        color: var(--gold);
+        filter: drop-shadow(0 0 6px rgba(201, 168, 76, .5));
+    }
+
+    .cat-tab:hover {
+        transform: translateY(-5px);
+        border-color: var(--gold-border);
+        box-shadow: 0 16px 45px rgba(0, 0, 0, .5), 0 0 0 1px rgba(201, 168, 76, .28);
+    }
+
+    .cat-tab.active {
+        background: linear-gradient(135deg, rgba(201, 168, 76, .10), rgba(201, 168, 76, .18));
+        border-color: var(--gold-border);
+        transform: translateY(-3px);
+        box-shadow: 0 12px 40px rgba(0, 0, 0, .45), 0 0 0 1px rgba(201, 168, 76, .35), 0 0 30px rgba(201, 168, 76, .08);
+    }
+
+    .cat-tab.active .cat-label {
+        color: var(--gold-light);
+    }
+
+    .cat-tab.active .cat-icon {
+        background: linear-gradient(135deg, rgba(201, 168, 76, .20), rgba(201, 168, 76, .35));
+        box-shadow: 0 0 25px rgba(201, 168, 76, .28);
+    }
+
+    .cat-tab.active .cat-icon i {
+        color: var(--gold);
+        filter: drop-shadow(0 0 8px rgba(201, 168, 76, .6));
+    }
+
+    .cat-tab.active .cat-count-badge {
+        background: rgba(201, 168, 76, .15);
+        border-color: rgba(201, 168, 76, .35);
+        color: var(--gold);
+    }
+
+    /* ══════════════════════════════════════
+   CATEGORY HEADER BANNER
+══════════════════════════════════════ */
+    .category-banner {
+        position: relative;
+        border-radius: var(--r-lg);
+        overflow: hidden;
+        margin-bottom: 2.5rem;
+        min-height: 140px;
+        display: flex;
+        align-items: center;
+        padding: 2rem 2.5rem;
+    }
+
+    .category-banner-bg {
+        position: absolute;
+        inset: 0;
+        background-size: cover;
+        background-position: center;
+        filter: brightness(.35) saturate(.7);
+        transition: filter .5s;
+    }
+
+    .category-banner:hover .category-banner-bg {
+        filter: brightness(.4) saturate(.85);
+    }
+
+    .category-banner::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(135deg, rgba(4, 4, 13, .85) 0%, rgba(4, 4, 13, .45) 100%);
+        z-index: 1;
+    }
+
+    /* Gold frame lines */
+    .category-banner::after {
+        content: '';
+        position: absolute;
+        inset: 1px;
+        border: 1px solid rgba(201, 168, 76, .20);
+        border-radius: calc(var(--r-lg) - 1px);
+        z-index: 1;
+        pointer-events: none;
+    }
+
+    .banner-content {
+        position: relative;
+        z-index: 2;
+        display: flex;
+        align-items: center;
+        gap: 1.8rem;
+    }
+
+    .banner-icon {
+        width: 72px;
+        height: 72px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, rgba(201, 168, 76, .15), rgba(201, 168, 76, .28));
+        border: 1.5px solid var(--gold-border);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 0 30px rgba(201, 168, 76, .22);
+        flex-shrink: 0;
+    }
+
+    .banner-icon i {
+        font-size: 2rem;
+        color: var(--gold);
+        filter: drop-shadow(0 0 10px rgba(201, 168, 76, .7));
+    }
+
+    .banner-text h2 {
+        font-family: 'Amiri', serif;
+        font-size: clamp(1.6rem, 3vw, 2.2rem);
+        color: var(--gold-light);
+        text-shadow: 0 0 25px rgba(201, 168, 76, .4);
+        margin-bottom: .3rem;
+    }
+
+    .banner-text p {
+        color: rgba(255, 255, 255, 0.75);
+        font-size: .9rem;
+        line-height: 1.7;
+    }
+
+    /* ══════════════════════════════════════
+   PROGRESS BAR (per session)
+══════════════════════════════════════ */
+    .session-progress {
+        background: var(--panel);
+        border: 1px solid var(--border);
+        border-radius: var(--r);
+        padding: 1.2rem 1.8rem;
+        margin-bottom: 2rem;
+        backdrop-filter: blur(12px);
+        box-shadow: var(--shadow-card);
+        display: flex;
+        align-items: center;
+        gap: 1.2rem;
+        flex-wrap: wrap;
+    }
+
+    .progress-bar-wrap {
+        flex: 1;
+        min-width: 120px;
+        background: rgba(255, 255, 255, .06);
+        border-radius: 50px;
+        height: 8px;
+        border: 1px solid var(--border);
+        overflow: hidden;
+    }
+
+    .progress-bar-fill {
+        height: 100%;
+        background: linear-gradient(90deg, var(--gold-dark), var(--gold), var(--gold-light));
+        border-radius: 50px;
+        transition: width 1s cubic-bezier(.34, 1.56, .64, 1);
+        box-shadow: 0 0 12px rgba(201, 168, 76, .5);
+    }
+
+    .progress-label {
+        font-family: 'El Messiri', serif;
+        font-size: .88rem;
+        color: var(--text-muted);
+        white-space: nowrap;
+    }
+
+    .progress-label strong {
+        color: var(--gold);
+    }
+
+    /* ══════════════════════════════════════
+   ADHKAR ITEMS
+══════════════════════════════════════ */
+    .adhkar-list {
+        display: flex;
+        flex-direction: column;
+        gap: 1.3rem;
+        margin-bottom: 2.5rem;
+    }
+
+    .adhkr-card {
+        background: var(--panel);
+        border: 1px solid var(--border);
+        border-radius: var(--r-lg);
+        overflow: hidden;
+        position: relative;
+        transition: all .45s cubic-bezier(.34, 1.56, .64, 1);
+        backdrop-filter: blur(18px);
+        box-shadow: var(--shadow-card);
+        animation: slide-in .4s ease both;
+    }
+
+    @keyframes slide-in {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .adhkr-card::before {
+        content: '';
+        position: absolute;
+        right: 0;
+        top: 15%;
+        bottom: 15%;
+        width: 3px;
+        background: linear-gradient(180deg, transparent, var(--gold), transparent);
+        border-radius: 2px;
+        opacity: .65;
+        transition: opacity .3s;
+    }
+
+    .adhkr-card:hover {
+        transform: translateX(-4px);
+        border-color: var(--gold-border);
+        box-shadow: 0 16px 50px rgba(0, 0, 0, .55), 0 0 0 1px rgba(201, 168, 76, .28);
+    }
+
+    .adhkr-card:hover::before {
+        opacity: 1;
+    }
+
+    .adhkr-card.done-card {
+        border-color: rgba(39, 168, 105, .28);
+        background: rgba(27, 107, 69, .07);
+    }
+
+    .adhkr-card.done-card::before {
+        background: linear-gradient(180deg, transparent, #27a869, transparent);
+    }
+
+    /* Card top bar */
+    .adhkr-top-bar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: .8rem 1.6rem;
+        border-bottom: 1px solid var(--border);
+        background: rgba(201, 168, 76, .03);
+    }
+
+    .adhkr-num-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: .4rem;
+        font-family: 'El Messiri', serif;
+        font-size: .78rem;
+        color: var(--text-dim);
+        background: var(--gold-pale);
+        border: 1px solid rgba(201, 168, 76, .15);
+        padding: .2rem .75rem;
+        border-radius: 50px;
+    }
+
+    .adhkr-num-badge i {
+        color: var(--gold-dark);
+        font-size: .65rem;
+    }
+
+    .adhkr-source {
+        font-size: .75rem;
+        color: var(--text-dim);
+        font-style: italic;
+        display: flex;
+        align-items: center;
+        gap: .35rem;
+    }
+
+    .adhkr-source i {
+        color: var(--gold-dark);
+    }
+
+    /* Card body */
+    .adhkr-body {
+        padding: 1.6rem 2rem;
+        display: flex;
+        align-items: center;
+        gap: 1.8rem;
+        flex-wrap: wrap;
+    }
+
+    .adhkr-texts {
+        flex: 1;
+        min-width: 200px;
+    }
+
+    .adhkr-title-text {
+        font-family: 'Amiri', serif;
+        font-size: 1.15rem;
+        color: var(--gold-light);
+        margin-bottom: .6rem;
+    }
+
+    .adhkr-arabic {
+        font-family: 'Scheherazade New', serif;
+        font-size: 1.2rem;
+        color: var(--text-bright);
+        line-height: 2.4;
+        text-shadow: 0 1px 4px rgba(0, 0, 0, .5);
+    }
+
+    /* Counter widget */
+    .adhkr-counter {
+        flex-shrink: 0;
+    }
+
+    .ring-counter {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: .5rem;
+    }
+
+    /* SVG ring progress button */
+    .ring-btn-wrap {
+        position: relative;
+        width: 72px;
+        height: 72px;
+        cursor: pointer;
+    }
+
+    .ring-btn-wrap svg {
+        position: absolute;
+        inset: 0;
+        transform: rotate(-90deg);
+        pointer-events: none;
+    }
+
+    .ring-progress-bg {
+        fill: none;
+        stroke: rgba(201, 168, 76, .12);
+        stroke-width: 4;
+    }
+
+    .ring-progress-arc {
+        fill: none;
+        stroke: var(--gold);
+        stroke-width: 4;
+        stroke-linecap: round;
+        transition: stroke-dashoffset .4s ease;
+    }
+
+    .ring-tap-btn {
+        position: absolute;
+        inset: 8px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, var(--gold-dark), var(--gold));
+        border: none;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: 'El Messiri', serif;
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: #060408;
+        box-shadow: 0 3px 15px rgba(201, 168, 76, .4), inset 0 1px 0 rgba(255, 255, 255, .2);
+        transition: all .2s cubic-bezier(.34, 1.56, .64, 1);
+        overflow: hidden;
+        width: auto;
+        height: auto;
+    }
+
+    .ring-tap-btn:hover {
+        transform: scale(1.1);
+        box-shadow: 0 6px 25px rgba(201, 168, 76, .55);
+    }
+
+    .ring-tap-btn:active {
+        transform: scale(.92);
+    }
+
+    .ring-tap-btn.done {
+        background: linear-gradient(135deg, #1a5e30, #27a869);
+        box-shadow: 0 3px 15px rgba(39, 168, 105, .4);
+        pointer-events: none;
+    }
+
+    .ring-count-lbl {
+        font-family: 'El Messiri', serif;
+        font-size: .82rem;
+        color: var(--text-muted);
+        text-align: center;
+        line-height: 1.3;
+    }
+
+    .ring-count-lbl.done-lbl {
+        color: #27a869;
+    }
+
+    /* Dec btn */
+    .ring-dec-btn {
+        width: 22px;
+        height: 22px;
+        border-radius: 50%;
+        background: rgba(201, 168, 76, .06);
+        border: 1px solid rgba(201, 168, 76, .15);
+        color: var(--text-dim);
+        font-size: .8rem;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all .2s;
+    }
+
+    .ring-dec-btn:hover {
+        background: rgba(200, 80, 80, .1);
+        border-color: rgba(200, 80, 80, .3);
+        color: #ff7070;
+    }
+
+    .ring-dec-btn:disabled {
+        opacity: .25;
+        cursor: default;
+    }
+
+    /* Read-only (no counter) card subtle indicator */
+    .read-only-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: .35rem;
+        font-size: .72rem;
+        color: var(--text-dim);
+        background: rgba(255, 255, 255, .04);
+        border: 1px solid rgba(255, 255, 255, .07);
+        padding: .2rem .7rem;
+        border-radius: 50px;
+    }
+
+    /* ══════════════════════════════════════
+   LOADING & ERROR STATES
+══════════════════════════════════════ */
+    .hisn-loading {
+        text-align: center;
+        padding: 3rem;
+        background: var(--panel);
+        border: 1px solid var(--border);
+        border-radius: var(--r-lg);
+        backdrop-filter: blur(15px);
+        box-shadow: var(--shadow-card);
+    }
+
+    .hisn-loading i {
+        font-size: 2.5rem;
+        color: var(--gold);
+        display: block;
+        margin-bottom: 1rem;
+        animation: spin-glow 1.2s linear infinite;
+    }
+
+    @keyframes spin-glow {
+        from {
+            transform: rotate(0deg);
+            filter: drop-shadow(0 0 5px rgba(201, 168, 76, .5))
+        }
+
+        to {
+            transform: rotate(360deg);
+            filter: drop-shadow(0 0 15px rgba(201, 168, 76, .8))
+        }
+    }
+
+    /* ── Ripple ── */
+    @keyframes ripple-out {
+        from {
+            transform: scale(0);
+            opacity: .5
+        }
+
+        to {
+            transform: scale(3.5);
+            opacity: 0
+        }
+    }
+
+    .rpl {
+        position: absolute;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, .25);
+        width: 30px;
+        height: 30px;
+        margin: -15px 0 0 -15px;
+        animation: ripple-out .5s ease-out forwards;
+        pointer-events: none;
+    }
+
+    /* ── Responsive ── */
+    @media (max-width:600px) {
+        .adhkr-body {
+            flex-direction: column;
+            gap: 1.2rem;
+        }
+
+        .adhkr-counter {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+        }
+
+        .ring-counter {
+            flex-direction: row;
+            gap: 1.2rem;
+            align-items: center;
+        }
+
+        .banner-content {
+            flex-direction: column;
+            text-align: center;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<!-- ═══════════════ PAGE HEADER ═══════════════ -->
+<div class="page-header">
+    <div class="container">
+        <h1 class="page-title">
+            <i class="fas fa-moon" style="font-size:.75em;margin-left:.4rem;"></i>
+            حصن المسلم
+        </h1>
+        <p class="page-description">أذكار الصباح والمساء وأذكار النوم والاستيقاظ من السنة النبوية الشريفة</p>
+    </div>
+</div>
+
+<!-- ═══════════════ HISN SECTION ═══════════════ -->
+<section class="hisn-section">
+    <div class="container">
+
+        <!-- ── Category Tabs ── -->
+        <div class="category-tabs">
+            <div class="cat-tab active" onclick="loadCategory('morning')" data-category="morning">
+                <div class="cat-tab-inner">
+                    <div class="cat-icon"><i class="fas fa-sun"></i></div>
+                    <span class="cat-label">أذكار الصباح</span>
+                    <span class="cat-count-badge">١٦ ذكر</span>
+                </div>
+            </div>
+            <div class="cat-tab" onclick="loadCategory('evening')" data-category="evening">
+                <div class="cat-tab-inner">
+                    <div class="cat-icon"><i class="fas fa-cloud-moon"></i></div>
+                    <span class="cat-label">أذكار المساء</span>
+                    <span class="cat-count-badge">١٤ ذكر</span>
+                </div>
+            </div>
+            <div class="cat-tab" onclick="loadCategory('sleep')" data-category="sleep">
+                <div class="cat-tab-inner">
+                    <div class="cat-icon"><i class="fas fa-bed"></i></div>
+                    <span class="cat-label">أذكار النوم</span>
+                    <span class="cat-count-badge">٨ أذكار</span>
+                </div>
+            </div>
+            <div class="cat-tab" onclick="loadCategory('wakeup')" data-category="wakeup">
+                <div class="cat-tab-inner">
+                    <div class="cat-icon"><i class="fas fa-cloud-sun"></i></div>
+                    <span class="cat-label">أذكار الاستيقاظ</span>
+                    <span class="cat-count-badge">٣ أذكار</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- ── Category Banner (updated dynamically) ── -->
+        <div class="category-banner" id="cat-banner">
+            <div class="category-banner-bg" id="banner-bg"></div>
+            <div class="banner-content">
+                <div class="banner-icon"><i id="banner-icon" class="fas fa-sun"></i></div>
+                <div class="banner-text">
+                    <h2 id="banner-title">أذكار الصباح</h2>
+                    <p id="banner-desc">أذكار تقال في الصباح لحفظ العبد وصون يومه بإذن الله</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ── Session Progress ── -->
+        <div class="session-progress" id="session-progress" style="display:none;">
+            <i class="fas fa-tasks" style="color:var(--gold);font-size:1rem;flex-shrink:0;"></i>
+            <div class="progress-bar-wrap">
+                <div class="progress-bar-fill" id="prog-fill" style="width:0%"></div>
+            </div>
+            <span class="progress-label" id="prog-label">
+                <strong>0</strong> / 0 مكتمل
+            </span>
+        </div>
+
+        <!-- ── Loading ── -->
+        <div class="hisn-loading" id="hisn-loading">
+            <i class="fas fa-spinner"></i>
+            <p style="color:var(--text-muted);">جاري تحميل الأذكار...</p>
+        </div>
+
+        <!-- ── Adhkar List (rendered dynamically) ── -->
+        <div class="adhkar-list" id="adhkar-container" style="display:none;"></div>
+
+        <!-- ── Error ── -->
+        <div id="adhkar-error" style="display:none;text-align:center;padding:2rem;
+            background:var(--panel);border:1px solid rgba(220,80,80,.3);border-radius:var(--r-lg);
+            backdrop-filter:blur(12px);">
+            <i class="fas fa-exclamation-circle"
+                style="font-size:2rem;color:#e74c3c;display:block;margin-bottom:.8rem;"></i>
+            <p id="error-text" style="color:var(--text-muted);"></p>
+        </div>
+
+    </div>
+</section>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // ════════════════════════════════════════════════════════════
+    // HISN AL-MUSLIM — Full Database + Premium UI
+    // ════════════════════════════════════════════════════════════
+
+    /* ── Category meta ── */
+    const CAT_META = {
+        morning: {
+            title: 'أذكار الصباح', icon: 'fas fa-sun',
+            desc: 'أذكار تقال في الصباح لحفظ العبد وصون يومه بإذن الله',
+
+        },
+        evening: {
+            title: 'أذكار المساء', icon: 'fas fa-cloud-moon',
+            desc: 'أذكار المساء لختم النهار بالذكر والشكر والاستغفار',
+
+        },
+        sleep: {
+            title: 'أذكار النوم', icon: 'fas fa-bed',
+            desc: 'أذكار وأدعية تقال عند الأوان إلى الفراش',
+
+        },
+        wakeup: {
+            title: 'أذكار الاستيقاظ', icon: 'fas fa-cloud-sun',
+            desc: 'أول ما يقوله المسلم حين يفيق من نومه',
+
+        }
+    };
+
+    /* ── Full Adhkar Database ── */
+    const ADHKAR_DB = {
+        morning: [
+            { TITLE: 'دعاء الصباح', TEXT: 'أَصْبَحْنَا وَأَصْبَحَ الْمُلْكُ لِلَّهِ، وَالْحَمْدُ لِلَّهِ، لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ، رَبِّ أَسْأَلُكَ خَيْرَ مَا فِي هَذَا الْيَوْمِ وَخَيْرَ مَا بَعْدَهُ، وَأَعُوذُ بِكَ مِنْ شَرِّ مَا فِي هَذَا الْيَوْمِ وَشَرِّ مَا بَعْدَهُ، رَبِّ أَعُوذُ بِكَ مِنَ الْكَسَلِ وَسُوءِ الْكِبَرِ، رَبِّ أَعُوذُ بِكَ مِنْ عَذَابٍ فِي النَّارِ وَعَذَابٍ فِي الْقَبْرِ', DESCRIPTION: 'رواه مسلم', COUNT: 1 },
+            { TEXT: 'اللَّهُمَّ بِكَ أَصْبَحْنَا، وَبِكَ أَمْسَيْنَا، وَبِكَ نَحْيَا، وَبِكَ نَمُوتُ، وَإِلَيْكَ النُّشُورُ', DESCRIPTION: 'رواه الترمذي', COUNT: 1 },
+            { TEXT: 'أَصْبَحْنَا عَلَى فِطْرَةِ الْإِسْلَامِ، وَعَلَى كَلِمَةِ الْإِخْلَاصِ، وَعَلَى دِينِ نَبِيِّنَا مُحَمَّدٍ ﷺ، وَعَلَى مِلَّةِ أَبِينَا إِبْرَاهِيمَ حَنِيفًا مُسْلِمًا', DESCRIPTION: 'رواه أحمد', COUNT: 1 },
+            { TEXT: 'سُبْحَانَ اللَّهِ وَبِحَمْدِهِ عَدَدَ خَلْقِهِ، وَرِضَا نَفْسِهِ، وَزِنَةَ عَرْشِهِ، وَمِدَادَ كَلِمَاتِهِ', DESCRIPTION: 'رواه مسلم', COUNT: 3 },
+            { TEXT: 'اللَّهُمَّ إِنِّي أَصْبَحْتُ أُشْهِدُكَ، وَأُشْهِدُ حَمَلَةَ عَرْشِكَ، وَمَلَائِكَتَكَ وَجَمِيعَ خَلْقِكَ، أَنَّكَ أَنْتَ اللَّهُ لَا إِلَهَ إِلَّا أَنْتَ وَحْدَكَ لَا شَرِيكَ لَكَ، وَأَنَّ مُحَمَّدًا عَبْدُكَ وَرَسُولُكَ', DESCRIPTION: 'من قالها أعتقه الله من النار — رواه أبو داود', COUNT: 4 },
+            { TEXT: 'اللَّهُمَّ مَا أَصْبَحَ بِي مِنْ نِعْمَةٍ أَوْ بِأَحَدٍ مِنْ خَلْقِكَ فَمِنْكَ وَحْدَكَ لَا شَرِيكَ لَكَ، فَلَكَ الْحَمْدُ وَلَكَ الشُّكْرُ', DESCRIPTION: 'رواه أبو داود', COUNT: 1 },
+            { TEXT: 'اللَّهُمَّ عَافِنِي فِي بَدَنِي، اللَّهُمَّ عَافِنِي فِي سَمْعِي، اللَّهُمَّ عَافِنِي فِي بَصَرِي، لَا إِلَهَ إِلَّا أَنْتَ', DESCRIPTION: 'رواه أبو داود', COUNT: 3 },
+            { TEXT: 'حَسْبِيَ اللَّهُ لَا إِلَهَ إِلَّا هُوَ، عَلَيْهِ تَوَكَّلْتُ وَهُوَ رَبُّ الْعَرْشِ الْعَظِيمِ', DESCRIPTION: 'من قالها كفاه الله ما أهمه — رواه أبو داود', COUNT: 7 },
+            { TEXT: 'أَعُوذُ بِكَلِمَاتِ اللَّهِ التَّامَّاتِ مِنْ شَرِّ مَا خَلَقَ', DESCRIPTION: 'رواه مسلم', COUNT: 3 },
+            { TEXT: 'بِسْمِ اللَّهِ الَّذِي لَا يَضُرُّ مَعَ اسْمِهِ شَيْءٌ فِي الْأَرْضِ وَلَا فِي السَّمَاءِ وَهُوَ السَّمِيعُ الْعَلِيمُ', DESCRIPTION: 'من قالها لم يضره شيء — رواه الترمذي', COUNT: 3 },
+            { TEXT: 'رَضِيتُ بِاللَّهِ رَبًّا، وَبِالْإِسْلَامِ دِينًا، وَبِمُحَمَّدٍ ﷺ رسولًا', DESCRIPTION: 'من قالها وجبت له الجنة — رواه أبو داود', COUNT: 3 },
+            { TITLE: 'آية الكرسي', TEXT: 'اللَّهُ لاَ إِلَهَ إِلاَّ هُوَ الْحَيُّ الْقَيُّومُ ۚ لاَ تَأْخُذُهُ سِنَةٌ وَلاَ نَوْمٌ...', DESCRIPTION: 'من قرأها في بيته لم يقربه شيطان', COUNT: 1 },
+            { TEXT: 'يَا حَيُّ يَا قَيُّومُ بِرَحْمَتِكَ أَسْتَغِيثُ، أَصْلِحْ لِي شَأْنِي كُلَّهُ، وَلَا تَكِلْنِي إِلَى نَفْسِي طَرْفَةَ عَيْنٍ', DESCRIPTION: 'صحيح الترغيب', COUNT: 1 },
+            { TEXT: 'لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ', DESCRIPTION: 'من قالها مائة مرة كانت له عدل عشر رقاب — رواه البخاري', COUNT: 100 },
+            { TEXT: 'سُبْحَانَ اللَّهِ وَبِحَمْدِهِ', DESCRIPTION: 'من قالها مائة مرة حطت خطاياه — رواه مسلم', COUNT: 100 },
+            { TITLE: 'سورة الإخلاص والمعوذتان', TEXT: 'قُلْ هُوَ اللَّهُ أَحَدٌ • اللَّهُ الصَّمَدُ • لَمْ يَلِدْ وَلَمْ يُولَدْ • وَلَمْ يَكُن لَّهُ كُفُوًا أَحَدٌ', DESCRIPTION: 'ثلاث مرات تكفي من كل شيء', COUNT: 3 },
+            {
+                "TITLE": "دُعَاءُ الْعَفْوِ وَالْعَافِيَةِ وَالتَّحْصِينِ",
+                "TEXT": "اللَّهُمَّ إِنِّي أَسْأَلُكَ الْعَفْوَ وَالْعَافِيَةَ فِي دِينِي وَدُنْيَايَ وَأَهْلِي وَمَالِي، اللَّهُمَّ اسْتُرْ عَوْرَتِي وَآمِنْ رَوْعَاتِي، اللَّهُمَّ احْفَظْنِي مِنْ بَيْنِ يَدَيَّ وَمِنْ خَلْفِي وَعَنْ يَمِينِي وَعَنْ شِمَالِي وَمِنْ فَوْقِي، وَأَعُوذُ بِعَظَمَتِكَ أَنْ أُغْتَالَ مِنْ تَحْتِي.",
+                "DESCRIPTION": "كَانَ النَّبِيُّ ﷺ لَا يَدَعُهُنَّ صَبَاحًا وَمَسَاءً (رَوَاهُ أَبُو دَاوُدَ وَصَحَّحَهُ الْأَلْبَانِي)",
+                "COUNT": 1
+            },
+            { TEXT: 'أَصْبَحْتُ أُثْنِيَ عَلَيْكَ حَمْدًا، وَأَشْهَدُ أَنْ لَا إِلَهَ إِلَّا اللهُ', DESCRIPTION: 'رواه النسائي في عمل اليوم والليلة', COUNT: 3 },
+        ],
+        evening: [
+            { TITLE: 'دعاء المساء', TEXT: 'أَمْسَيْنَا وَأَمْسَى الْمُلْكُ لِلَّهِ، وَالْحَمْدُ لِلَّهِ، لَا إِلَهَ إِلَّا اللهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ، رَبِّ أَسْأَلُكَ خَيْرَ مَا فِي هَذِهِ اللَّيْلَةِ وَخَيْرَ مَا بَعْدَهَا، وَأَعُوذُ بِكَ مِنْ شَرِّ مَا فِي هَذِهِ اللَّيْلَةِ وَشَرِّ مَا بَعْدَهَا، رَبِّ أَعُوذُ بِكَ مِنَ الْكَسَلِ وَسُوءِ الْكِبَرِ، رَبِّ أَعُوذُ بِكَ مِنْ عَذَابٍ فِي النَّارِ وَعَذَابٍ فِي الْقَبْرِ', DESCRIPTION: 'رواه مسلم', COUNT: 1 },
+            { TEXT: 'اللَّهُمَّ بِكَ أَمْسَيْنَا، وَبِكَ أَصْبَحْنَا، وَبِكَ نَحْيَا، وَبِكَ نَمُوتُ، وَإِلَيْكَ الْمَصِيرُ', DESCRIPTION: 'رواه الترمذي', COUNT: 1 },
+            { TEXT: 'أَمْسَيْنَا عَلَى فِطْرَةِ الْإِسْلَامِ، وَعَلَى كَلِمَةِ الْإِخْلَاصِ، وَعَلَى دِينِ نَبِيِّنَا مُحَمَّدٍ ﷺ، وَعَلَى مِلَّةِ أَبِينَا إِبْرَاهِيمَ حَنِيفًا مُسْلِمًا', DESCRIPTION: 'رواه أحمد', COUNT: 1 },
+            { TEXT: 'اللَّهُمَّ إِنِّي أَمْسَيْتُ أُشْهِدُكَ وَأُشْهِدُ حَمَلَةَ عَرْشِكَ وَمَلَائِكَتَكَ وَجَمِيعَ خَلْقِكَ، أَنَّكَ أَنْتَ اللَّهُ لَا إِلَهَ إِلَّا أَنْتَ وَحْدَكَ لَا شَرِيكَ لَكَ وَأَنَّ ُ مُحَمّـداً عَبْـدُكَ وَرَسـولُـك', DESCRIPTION: 'من قالها أعتقه الله من النار — رواه أبو داود', COUNT: 4 },
+            { TEXT: 'اللَّهُمَّ مَا أَمْسَى بِي مِنْ نِعْمَةٍ أَوْ بِأَحَدٍ مِنْ خَلْقِكَ فَمِنْكَ وَحْدَكَ لَا شَرِيكَ لَكَ، فَلَكَ الْحَمْدُ وَلَكَ الشُّكْرُ', DESCRIPTION: 'رواه أبو داود', COUNT: 1 },
+            { TEXT: 'اللَّهُمَّ عَافِنِي فِي بَدَنِي، اللَّهُمَّ عَافِنِي فِي سَمْعِي، اللَّهُمَّ عَافِنِي فِي بَصَرِي، لَا إِلَهَ إِلَّا أَنْتَ', DESCRIPTION: 'رواه أبو داود', COUNT: 3 },
+            { TEXT: 'حَسْبِيَ اللَّهُ لَا إِلَهَ إِلَّا هُوَ، عَلَيْهِ تَوَكَّلْتُ وَهُوَ رَبُّ الْعَرْشِ الْعَظِيمِ', DESCRIPTION: 'رواه أبو داود', COUNT: 7 },
+            { TEXT: 'أَعُوذُ بِكَلِمَاتِ اللَّهِ التَّامَّاتِ مِنْ شَرِّ مَا خَلَقَ', DESCRIPTION: 'رواه مسلم', COUNT: 3 },
+            { TEXT: 'بِسْمِ اللَّهِ الَّذِي لَا يَضُرُّ مَعَ اسْمِهِ شَيْءٌ فِي الْأَرْضِ وَلَا فِي السَّمَاءِ وَهُوَ السَّمِيعُ الْعَلِيمُ', DESCRIPTION: 'رواه الترمذي', COUNT: 3 },
+            { TEXT: 'رَضِيتُ بِاللَّهِ رَبًّا، وَبِالْإِسْلَامِ دِينًا، وَبِمُحَمَّدٍ ﷺ رسولًا', DESCRIPTION: 'رواه أبو داود', COUNT: 3 },
+            { TITLE: 'آية الكرسي', TEXT: 'اللَّهُ لاَ إِلَهَ إِلاَّ هُوَ الْحَيُّ الْقَيُّومُ ۚ لاَ تَأْخُذُهُ سِنَةٌ وَلاَ نَوْمٌ...', DESCRIPTION: 'من قرأها في بيته لم يقربه شيطان', COUNT: 1 },
+            { TITLE: 'سورة الإخلاص والمعوذتان', TEXT: 'قُلْ هُوَ اللَّهُ أَحَدٌ • اللَّهُ الصَّمَدُ • لَمْ يَلِدْ وَلَمْ يُولَدْ • وَلَمْ يَكُن لَّهُ كُفُوًا أَحَدٌ', DESCRIPTION: 'ثلاث مرات تكفي من كل شيء', COUNT: 3 },
+            { TITLE: 'خواتيم سورة البقرة', TEXT: 'آمَنَ الرَّسُولُ بِمَا أُنزِلَ إِلَيْهِ مِن رَّبِّهِ وَالْمُؤْمِنُونَ...', DESCRIPTION: 'من قرأ بالآيتين من آخر سورة البقرة في ليلة كفتاه', COUNT: 1 },
+            { TEXT: 'لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ', DESCRIPTION: 'رواه البخاري', COUNT: 100 },
+            {
+                "TITLE": "دُعَاءُ الْعَفْوِ وَالْعَافِيَةِ وَالتَّحْصِينِ",
+                "TEXT": "اللَّهُمَّ إِنِّي أَسْأَلُكَ الْعَفْوَ وَالْعَافِيَةَ فِي دِينِي وَدُنْيَايَ وَأَهْلِي وَمَالِي، اللَّهُمَّ اسْتُرْ عَوْرَتِي وَآمِنْ رَوْعَاتِي، اللَّهُمَّ احْفَظْنِي مِنْ بَيْنِ يَدَيَّ وَمِنْ خَلْفِي وَعَنْ يَمِينِي وَعَنْ شِمَالِي وَمِنْ فَوْقِي، وَأَعُوذُ بِعَظَمَتِكَ أَنْ أُغْتَالَ مِنْ تَحْتِي.",
+                "DESCRIPTION": "كَانَ النَّبِيُّ ﷺ لَا يَدَعُهُنَّ صَبَاحًا وَمَسَاءً (رَوَاهُ أَبُو دَاوُدَ وَصَحَّحَهُ الْأَلْبَانِي)",
+                "COUNT": 1
+            },
+            { TEXT: 'أَمْسَيْتُ أُثْنِيَ عَلَيْكَ حَمْدًا، وَأَشْهَدُ أَنْ لَا إِلَهَ إِلَّا اللهُ', DESCRIPTION: 'رواه النسائي في عمل اليوم والليلة', COUNT: 3 },
+        ],
+        sleep: [
+            { TEXT: 'بِاسْمِكَ اللَّهُمَّ أَمُوتُ وَأَحْيَا', DESCRIPTION: 'رواه البخاري', COUNT: 1 },
+            { TEXT: 'اللَّهُمَّ إِنَّكَ خَلَقْتَ نَفْسِي وَأَنْتَ تَوَفَّاهَا، لَكَ مَمَاتُهَا وَمَحْيَاهَا، إِنْ أَحْيَيْتَهَا فَاحْفَظْهَا، وَإِنْ أَمَتَّهَا فَاغْفِرْ لَهَا، اللَّهُمَّ إِنِّي أَسْأَلُكَ الْعَافِيَةَ', DESCRIPTION: 'رواه مسلم', COUNT: 1 },
+            { TEXT: 'اللَّهُمَّ قِنِي عَذَابَكَ يَوْمَ تَبْعَثُ عِبَادَكَ', DESCRIPTION: 'يضع يده تحت خده — رواه أبو داود', COUNT: 3 },
+            { TEXT: 'اللَّهُمَّ بِاسْمِكَ أَحْيَا وَأَمُوتُ', DESCRIPTION: 'رواه البخاري', COUNT: 1 },
+            { TITLE: 'آية الكرسي', TEXT: 'اللَّهُ لَا إِلَهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ ۚ لَا تَأْخُذُهُ سِنَةٌ وَلَا نَوْمٌ...', DESCRIPTION: 'من قرأها لم يزل عليه من الله حافظ', COUNT: 1 },
+            { TITLE: 'خواتيم سورة البقرة', TEXT: 'آمَنَ الرَّسُولُ بِمَا أُنزِلَ إِلَيْهِ مِن رَّبِّهِ وَالْمُؤْمِنُونَ...', DESCRIPTION: 'من قرأ بالآيتين من آخر سورة البقرة في ليلة كفتاه', COUNT: 1 },
+            { TEXT: 'اللَّهُمَّ أَسْلَمْتُ نَفْسِي إِلَيْكَ، وَفَوَّضْتُ أَمْرِي إِلَيْكَ، وَوَجَّهْتُ وَجْهِي إِلَيْكَ، وَأَلْجَأْتُ ظَهْرِي إِلَيْكَ، رَغْبَةً وَرَهْبَةً إِلَيْكَ، لَا مَلْجَأَ وَلَا مَنْجَا مِنْكَ إِلَّا إِلَيْكَ', DESCRIPTION: 'من قالها ثم مات مات على الفطرة — رواه البخاري', COUNT: 1 },
+            { TITLE: 'التسبيح قبل النوم', TEXT: 'سُبْحَانَ اللَّهِ (٣٣)، وَالْحَمْدُ لِلَّهِ (٣٣)، وَاللَّهُ أَكْبَرُ (٣٤)', DESCRIPTION: 'رواه البخاري ومسلم', COUNT: 1 },
+            { TITLE: 'المعوذات (الإخلاص والفلق والناس) بعد النفث في الكفين ومسح الجسد 3 مرات', TEXT: 'قُلْ هُوَ اللَّهُ أَحَدٌ • قُلْ أَعُوذُ بِرَبِّ الْفَلَقِ • قُلْ أَعُوذُ بِرَبِّ النَّاسِ', DESCRIPTION: 'رواه البخاري ومسلم', COUNT: 3 },
+            { TEXT: 'اللَّهُمَّ عَالِمَ الغَيْبِ وَالشَّهَادَةِ فَاطِرَ السَّمَوَاتِ وَالْأَرْضِ، رَبَّ كُلِّ شَيْءٍ وَمَلِيكَهُ، أَشْهَدُ أَنْ لاَ إِلَهَ إِلاَّ أَنْتَ، أَعُوذُ بِكَ مِنْ شَرِّ نَفْسِي، وَمِنْ شَرِّ الشَّيْطانِ وَشِرْكِهِ، وَأَنْ أَقْتَرِفَ عَلَى نَفْسِي سُوءاً، أَوْ أَجُرَّهُ إِلَى مُسْلِمٍ', DESCRIPTION: 'رواه مسلم', COUNT: 1 },
+            { TEXT: 'الْحَمْدُ لِلَّهِ الَّذِي أَطْعَمَنَا وَسَقَانَا، وَكَفَانَا، وَآوَانَا، فَكَمْ مِمَّنْ لاَ كَافِيَ لَهُ وَلاَ مُؤْوِيَ', DESCRIPTION: 'رواه أنس بن مالك', COUNT: 1 },
+            { TEXT: 'اللَّهُمَّ رَبَّ السَّمَوَاتِ السَّبْعِ وَرَبَّ الأَرْضِ، وَرَبَّ الْعَرْشِ الْعَظِيمِ، رَبَّنَا وَرَبَّ كُلِّ شَيْءٍ، فَالِقَ الْحَبِّ وَالنَّوَى، وَمُنْزِلَ التَّوْرَاةِ وَالْإِنْجِيلِ، وَالْفُرْقَانِ، أَعُوذُ بِكَ مِنْ شَرِّ كُلِّ شَيْءٍ أَنْتَ آخِذٌ بِنَاصِيَتِهِ. اللَّهُمَّ أَنْتَ الأَوَّلُ فَلَيْسَ قَبْلَكَ شَيْءٌ، وَأَنْتَ الآخِرُ فَلَيسَ بَعْدَكَ شَيْءٌ، وَأَنْتَ الظَّاهِرُ فَلَيْسَ فَوْقَكَ شَيْءٌ، وَأَنْتَ الْبَاطِنُ فَلَيْسَ دُونَكَ شَيْءٌ، اقْضِ عَنَّا الدَّيْنَ وَأَغْنِنَا مِنَ الْفَقْرِ', DESCRIPTION: 'رواه أبو هريرة', COUNT: 1 },
+            { TEXT: 'إذا أخذتَ مَضجعَك منَ اللَّيلِ فاقرَأْ {قُلْ يَا أَيُّهَا الْكَافِرُونَ} ثُمَّ نَمْ على خاتمتِها فإنَّها براءةٌ منَ الشِّركِ', DESCRIPTION: ' رواه نوفل بن معاوية وجبلة بن حارثة', COUNT: 1 }
+        ],
+        wakeup: [
+            { TEXT: 'الْحَمْدُ لِلَّهِ الَّذِي أَحْيَانَا بَعْدَ مَا أَمَاتَنَا وَإِلَيْهِ النُّشُورُ', DESCRIPTION: 'رواه البخاري', COUNT: 1 },
+            { TEXT: 'لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ، سُبْحَانَ اللَّهِ، وَالْحَمْدُ لِلَّهِ، وَلَا إِلَهَ إِلَّا اللَّهُ، وَاللَّهُ أَكْبَرُ، وَلَا حَوْلَ وَلَا قُوَّةَ إِلَّا بِاللَّهِ', DESCRIPTION: 'من قالها غفرت ذنوبه ولو كانت مثل زبد البحر', COUNT: 1 },
+            { TEXT: 'الْحَمْدُ لِلَّهِ الَّذِي عَافَانِي فِي جَسَدِي، وَرَدَّ عَلَيَّ رُوحِي، وَأَذِنَ لِي بِذِكْرِهِ', DESCRIPTION: 'رواه الترمذي', COUNT: 1 }
+        ]
+    };
+
+    // ── State ──
+    let currentCat = 'morning';
+    let catProgress = JSON.parse(localStorage.getItem('hisnProgress_v2') || '{}');
+
+    /* ── Load category ── */
+    function loadCategory(cat) {
+        currentCat = cat;
+
+        // Update tab active state
+        document.querySelectorAll('.cat-tab').forEach(t => {
+            t.classList.toggle('active', t.dataset.category === cat);
+        });
+
+        // Update banner
+        const m = CAT_META[cat];
+        document.getElementById('banner-bg').style.backgroundImage = `url('${m.bg}')`;
+        document.getElementById('banner-icon').className = m.icon;
+        document.getElementById('banner-title').textContent = m.title;
+        document.getElementById('banner-desc').textContent = m.desc;
+
+        // Show loading briefly for UX feedback
+        document.getElementById('hisn-loading').style.display = 'block';
+        document.getElementById('adhkar-container').style.display = 'none';
+        document.getElementById('session-progress').style.display = 'none';
+
+        setTimeout(() => {
+            document.getElementById('hisn-loading').style.display = 'none';
+            document.getElementById('adhkar-container').style.display = 'flex';
+            document.getElementById('session-progress').style.display = 'flex';
+            renderAdhkar(ADHKAR_DB[cat] || []);
+            updateProgress();
+        }, 280);
+    }
+
+    /* ── Render cards ── */
+    function renderAdhkar(data) {
+        const container = document.getElementById('adhkar-container');
+        container.innerHTML = '';
+
+        if (!data.length) {
+            container.innerHTML = '<p style="color:var(--text-muted);text-align:center;padding:2rem;">لا توجد أذكار متاحة</p>';
+            return;
+        }
+
+        data.forEach((d, i) => {
+            const max = d.COUNT || 1;
+            const key = `${currentCat}_${i}`;
+            const cur = (catProgress[key] || {}).current || 0;
+            const isDone = cur >= max;
+            const needCount = max > 1;
+
+            const card = document.createElement('div');
+            card.className = `adhkr-card${isDone ? ' done-card' : ''}`;
+            card.id = `hcard-${i}`;
+            card.style.animationDelay = `${i * 0.055}s`;
+
+            // Ring progress params
+            const R = 26; // radius of SVG ring
+            const C = 2 * Math.PI * R;
+            const pct = Math.min(cur / max, 1);
+            const off = C - pct * C;
+
+            card.innerHTML = `
+            <div class="adhkr-top-bar">
+                <span class="adhkr-num-badge">
+                    <i class="fas fa-bookmark"></i>
+                    ذكر ${toArabicNum(i + 1)}
+                </span>
+                ${d.DESCRIPTION ? `<span class="adhkr-source">
+                    <i class="fas fa-book-open"></i>
+                    ${d.DESCRIPTION}
+                </span>` : ''}
+            </div>
+            <div class="adhkr-body">
+                <div class="adhkr-texts">
+                    ${d.TITLE ? `<div class="adhkr-title-text">${d.TITLE}</div>` : ''}
+                    <div class="adhkr-arabic">${d.TEXT}</div>
+                </div>
+                ${needCount ? `
+                <div class="adhkr-counter">
+                    <div class="ring-counter">
+                        <button class="ring-dec-btn" id="hdec-${i}"
+                            onclick="hDecrement(${i})"
+                            ${cur === 0 ? 'disabled' : ''}>−</button>
+                        <div class="ring-btn-wrap">
+                            <svg viewBox="0 0 72 72" width="72" height="72">
+                                <circle class="ring-progress-bg" cx="36" cy="36" r="${R}"/>
+                                <circle class="ring-progress-arc" id="harc-${i}"
+                                    cx="36" cy="36" r="${R}"
+                                    stroke-dasharray="${C}"
+                                    stroke-dashoffset="${off}"/>
+                            </svg>
+                            <button class="ring-tap-btn${isDone ? ' done' : ''}"
+                                id="hbtn-${i}"
+                                onclick="hTap(${i}, ${max})">
+                                <span id="hcnt-${i}">${isDone ? '✓' : (max - cur)}</span>
+                            </button>
+                        </div>
+                        <span class="ring-count-lbl${isDone ? ' done-lbl' : ''}" id="hlbl-${i}">
+                            ${cur} / ${max}
+                        </span>
+                    </div>
+                </div>` : `
+                <div class="adhkr-counter">
+                    <span class="read-only-chip">
+                        <i class="fas fa-check-circle" style="color:var(--gold-dark)"></i>
+                        مرة واحدة
+                    </span>
+                </div>`}
+            </div>
+        `;
+
+            container.appendChild(card);
+        });
+    }
+
+    /* ── Tap ── */
+    function hTap(i, max) {
+        const key = `${currentCat}_${i}`;
+        if (!catProgress[key]) catProgress[key] = { current: 0 };
+        const s = catProgress[key];
+        if (s.current >= max) return;
+
+        s.current++;
+        saveHisnProgress();
+        updateCardUI(i, max, s.current);
+        updateProgress();
+
+        // Ripple on button
+        const btn = document.getElementById(`hbtn-${i}`);
+        const r = document.createElement('span');
+        r.className = 'rpl';
+        btn.appendChild(r);
+        setTimeout(() => r.remove(), 550);
+
+        if (s.current >= max) completeHCard(i);
+    }
+
+    /* ── Decrement ── */
+    function hDecrement(i) {
+        const key = `${currentCat}_${i}`;
+        if (!catProgress[key] || catProgress[key].current <= 0) return;
+        catProgress[key].current--;
+
+        const data = ADHKAR_DB[currentCat][i];
+        const max = data?.COUNT || 1;
+        saveHisnProgress();
+        updateCardUI(i, max, catProgress[key].current);
+
+        // Undo done state
+        const card = document.getElementById(`hcard-${i}`);
+        const btn = document.getElementById(`hbtn-${i}`);
+        if (card) card.classList.remove('done-card');
+        if (btn) btn.classList.remove('done');
+        updateProgress();
+    }
+
+    /* ── Update card UI ── */
+    function updateCardUI(i, max, cur) {
+        const isDone = cur >= max;
+        const rem = max - cur;
+        const R = 26;
+        const C = 2 * Math.PI * R;
+        const pct = Math.min(cur / max, 1);
+        const off = C - pct * C;
+
+        const arc = document.getElementById(`harc-${i}`);
+        const cnt = document.getElementById(`hcnt-${i}`);
+        const lbl = document.getElementById(`hlbl-${i}`);
+        const dec = document.getElementById(`hdec-${i}`);
+
+        if (arc) arc.style.strokeDashoffset = off;
+        if (cnt) cnt.textContent = isDone ? '✓' : rem;
+        if (lbl) { lbl.textContent = `${cur} / ${max}`; lbl.className = `ring-count-lbl${isDone ? ' done-lbl' : ''}`; }
+        if (dec) dec.disabled = cur <= 0;
+    }
+
+    /* ── Complete card ── */
+    function completeHCard(i) {
+        const card = document.getElementById(`hcard-${i}`);
+        const btn = document.getElementById(`hbtn-${i}`);
+        if (card) { card.classList.add('done-card'); }
+        if (btn) { btn.classList.add('done'); }
+    }
+
+    /* ── Progress bar ── */
+    function updateProgress() {
+        const data = ADHKAR_DB[currentCat] || [];
+        const countables = data.filter(d => (d.COUNT || 1) > 1);
+        if (!countables.length) { document.getElementById('session-progress').style.display = 'none'; return; }
+
+        const total = countables.length;
+        const done = countables.filter((d, realIdx) => {
+            const i = data.indexOf(d);
+            const key = `${currentCat}_${i}`;
+            return (catProgress[key]?.current || 0) >= (d.COUNT || 1);
+        }).length;
+
+        const pct = Math.round((done / total) * 100);
+        document.getElementById('prog-fill').style.width = pct + '%';
+        document.getElementById('prog-label').innerHTML =
+            `<strong>${done}</strong> / ${total} مكتمل`;
+    }
+
+    /* ── Persist ── */
+    function saveHisnProgress() {
+        localStorage.setItem('hisnProgress_v2', JSON.stringify(catProgress));
+        localStorage.setItem('hisnDate_v2', new Date().toDateString());
+    }
+
+    /* ── Arabic numerals helper ── */
+    function toArabicNum(n) {
+        return String(n).replace(/\d/g, d => '٠١٢٣٤٥٦٧٨٩'[d]);
+    }
+    // ══════════ RÉINITIALISATION QUOTIDIENNE À MINUIT ══════════
+    function resetHisnCounters() {
+        catProgress = {};
+        localStorage.setItem('hisnProgress_v2', '{}');
+        localStorage.setItem('hisnDate_v2', new Date().toDateString());
+
+        // Re-rendre la catégorie actuelle pour mettre à jour l'interface
+        if (currentCat) {
+            renderAdhkar(ADHKAR_DB[currentCat] || []);
+            updateProgress();
+        }
+    }
+
+    function scheduleMidnightReset() {
+        const now = new Date();
+        const midnight = new Date(now);
+        midnight.setHours(24, 0, 0, 0);          // prochain minuit
+        const msUntilMidnight = midnight - now;
+
+        setTimeout(() => {
+            const today = new Date().toDateString();
+            const lastDate = localStorage.getItem('hisnDate_v2');
+            if (lastDate !== today) {
+                resetHisnCounters();
+            }
+            scheduleMidnightReset();             // reprogramme pour le jour suivant
+        }, msUntilMidnight);
+    }
+    /* ── Init ── */
+    document.addEventListener('DOMContentLoaded', () => {
+        currentCat = 'morning';
+        loadCategory('morning');
+
+        // Vérification au chargement + planification du prochain minuit
+        const today = new Date().toDateString();
+        const lastDate = localStorage.getItem('hisnDate_v2');
+        if (lastDate !== today) {
+            resetHisnCounters();
+        } else if (!lastDate) {
+            localStorage.setItem('hisnDate_v2', today);
+        }
+        scheduleMidnightReset();
+    });
+</script>
+{% endblock %}

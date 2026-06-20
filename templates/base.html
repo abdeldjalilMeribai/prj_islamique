@@ -194,15 +194,21 @@
             <!-- bg handled by ::before in CSS -->
 
             <div class="hero-content">
-                <span class="hero-allah">لا إله إلا الله</span>
-
                 <h2>
                     « وَأَقِيمُوا الصَّلَاةَ<br>
                     وَآتُوا الزَّكَاةَ »
                 </h2>
 
                 <p>حافظ على صلواتك في أوقاتها — أداة رقمية متكاملة للمسلم</p>
-
+            <div style="display:flex;gap:1.2rem;justify-content:center;flex-wrap:wrap;animation:fade-in-down 1s .7s both;">
+                <a href="{{ url_for('prayers') }}" class="btn">
+                    <i class="fas fa-clock"></i> أوقات الصلاة
+                </a>
+                <a href="{{ url_for('couran') }}" class="btn"
+                style="background:transparent;border:1px solid var(--amber);color:var(--amber-light);">
+                    <i class="fas fa-book-open"></i> القرآن الكريم
+                </a>
+            </div>
                 <div
                     style="display:flex;gap:1.2rem;justify-content:center;flex-wrap:wrap;animation:fade-in-down 1s .7s both;">
                 </div>
@@ -588,7 +594,7 @@
 
             // Liste des images pour mobile 
             const mobileBgImages = [
-                "url('/static/images/1.jpg')",
+                "url('/static/images/mobile_hero.jpg')",
                 "url('/static/images/hero-mobile2.png')",
             ];
 

@@ -290,16 +290,7 @@ nav a.active {
   animation: hero-appear 1.2s ease-out both;
 }
 
-.hero-allah {
-  font-family: 'Scheherazade New', serif;
-  font-size: 1.5rem;
-  color: var(--amber-light);
-  display: block;
-  margin-bottom: 1.5rem;
-  letter-spacing: 4px;
-  opacity: .9;
-  animation: fade-in-down 1s .2s both;
-}
+
 
 .hero-content h2 {
   font-family: 'Amiri', serif;
@@ -2375,3 +2366,4 @@ body {
     padding-top: calc(env(safe-area-inset-top) + 0px);
   }
 }
+

@@ -4,374 +4,66 @@
 
 {% block extra_css %}
 <style>
-    /* ═══════════════════════════════════════════════
-   QURAN PAGE — Premium Luxury Reader
-═══════════════════════════════════════════════ */
+    /* ═══════════════════════════════════════════════════════════
+   QURAN PAGE — refonte complète
+   Sémantique : DEUX écrans, jamais mélangés.
+     1) Browse  → grille aérée de 114 sourates (rien d'autre ne s'affiche)
+     2) Reading → mode lecture immersif, une seule colonne centrée,
+                  une ayah = un vrai bloc avec respiration généreuse
+   Couleurs/typo : on garde les tokens existants du site (--gold, --amber,
+   --text-dark, etc.) pour rester cohérent avec le reste de "سبيل المسلم".
+═══════════════════════════════════════════════════════════ */
 
-
-/* ── MOBILE : ton image originale (inchangée) ── */
-.page-header::before {
-    background:
-        linear-gradient(180deg,
-            rgba(4, 4, 13, .45) 0%,
-            rgba(4, 4, 13, .20) 40%,
-            rgba(4, 4, 13, .92) 100%),
-        url('https://images.unsplash.com/photo-1585036156171-384164a8c675?w=1920&q=85') center 35% / cover no-repeat;
-}
-
-/* ── DESKTOP uniquement : nouvelle image paysage ── */
-@media (min-width: 768px) {
+    /* ── Header hero (inchangé) ── */
     .page-header::before {
         background:
             linear-gradient(180deg,
-                rgba(4, 4, 13, .42) 0%,
-                rgba(4, 4, 13, .08) 38%,
-                rgba(4, 4, 13, .90) 100%),
-            url('static/images/5.jpg') center 30% / cover no-repeat !important;
+                rgba(4, 4, 13, .45) 0%,
+                rgba(4, 4, 13, .20) 40%,
+                rgba(4, 4, 13, .92) 100%),
+            url('https://images.unsplash.com/photo-1585036156171-384164a8c675?w=1920&q=85') center 35% / cover no-repeat;
     }
-}
-    /* ── Main layout ── */
+
+    @media (min-width: 768px) {
+        .page-header::before {
+            background:
+                linear-gradient(180deg,
+                    rgba(4, 4, 13, .42) 0%,
+                    rgba(4, 4, 13, .08) 38%,
+                    rgba(4, 4, 13, .90) 100%),
+                url('static/images/5.jpg') center 30% / cover no-repeat !important;
+        }
+    }
+
+    /* ── Mode lecture plein écran : masque le hero pour une immersion totale ── */
+    body.quran-focus-mode .page-header,
+    body.quran-focus-mode .gold-line {
+        display: none;
+    }
+
+    body.quran-focus-mode .quran-section {
+        padding-top: 1.4rem;
+    }
+
+    /* ══════════════════════════════════════
+   SHELL — un seul conteneur, deux écrans
+══════════════════════════════════════ */
     .quran-section {
-        padding: 3rem 0 5rem;
+        padding: 3rem 0 6rem;
         position: relative;
         z-index: 1;
     }
 
-    .quran-layout {
-        display: grid;
-        grid-template-columns: 300px 1fr;
-        gap: 2rem;
-        align-items: start;
-    }
-
-    @media (max-width: 960px) {
-        .quran-layout {
-            grid-template-columns: 1fr;
-        }
-
-        .quran-sidebar {
-            position: static;
-        }
-    }
-
-    /* ══════════════════════════════════════
-   SIDEBAR
-══════════════════════════════════════ */
-    .quran-sidebar {
-        position: sticky;
-        top: 96px;
-        display: flex;
-        flex-direction: column;
-        gap: 1.4rem;
-    }
-
-    /* Sidebar card base */
-    .sidebar-card {
-        background: var(--panel);
-        border: 1px solid var(--border);
-        border-radius: var(--r-lg);
-        padding: 1.8rem;
-        backdrop-filter: blur(18px);
-        box-shadow: var(--shadow-card);
-        position: relative;
-        overflow: hidden;
-        transition: border-color .3s;
-    }
-
-    .sidebar-card::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 10%;
-        right: 10%;
-        height: 2px;
-        background: linear-gradient(90deg, transparent, var(--gold), transparent);
-        opacity: .6;
-    }
-
-    .sidebar-card:hover {
-        border-color: var(--gold-border);
-    }
-
-    /* Card heading */
-    .card-head {
-        display: flex;
-        align-items: center;
-        gap: .6rem;
-        font-family: 'Amiri', serif;
-        font-size: 1.1rem;
-        color: var(--gold-light);
-        margin-bottom: 1.2rem;
-        padding-bottom: .8rem;
-        border-bottom: 1px solid var(--border);
-    }
-
-    .card-head i {
-        color: var(--gold);
-    }
-
-    /* Styled select */
-    .qselect {
-        width: 100%;
-        padding: .85rem 1rem;
-        font-size: .96rem;
-        font-family: 'El Messiri', serif;
-        background: rgba(201, 168, 76, .05);
-        border: 1px solid var(--gold-border);
-        border-radius: 10px;
-        color: var(--text-main);
-        cursor: pointer;
-        transition: all .3s;
-        outline: none;
-        direction: rtl;
-        appearance: none;
-        -webkit-appearance: none;
-        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M6 8L0 0h12z' fill='%23C9A84C' opacity='.6'/%3E%3C/svg%3E");
-        background-repeat: no-repeat;
-        background-position: left 1rem center;
-        padding-left: 2.5rem;
-    }
-
-    .qselect:focus {
-        border-color: var(--gold);
-        box-shadow: 0 0 0 3px rgba(201, 168, 76, .12);
-    }
-
-    .qselect option {
-        background: #0F0F1A;
-        color: var(--text-main);
-    }
-
-    /* Search box */
-    .surah-search {
-        width: 100%;
-        padding: .75rem 2.8rem .75rem 1rem;
-        font-size: .9rem;
-        font-family: 'El Messiri', serif;
-        background: rgba(201, 168, 76, .04);
-        border: 1px solid var(--border);
-        border-radius: 10px;
-        color: var(--text-main);
-        outline: none;
-        direction: rtl;
-        transition: all .3s;
-        margin-bottom: 1rem;
-        position: relative;
-    }
-
-    .surah-search:focus {
-        border-color: var(--gold-border);
-        box-shadow: 0 0 0 3px rgba(201, 168, 76, .10);
-    }
-
-    .surah-search::placeholder {
-        color: var(--text-dim);
-    }
-
-    .search-wrap {
-        position: relative;
-        margin-bottom: 1rem;
-    }
-
-    .search-wrap i {
-        position: absolute;
-        right: .9rem;
-        top: 0;
-        bottom: 0;
-        margin: auto;
-        height: fit-content;
-        color: var(--amber-dark);
-        font-size: .85rem;
-        pointer-events: none;
-    }
-
-    /* Surah quick-list */
-    .surah-quick-list {
-        max-height: 260px;
-        overflow-y: auto;
-        display: flex;
-        flex-direction: column;
-        gap: .3rem;
-        scrollbar-width: thin;
-        scrollbar-color: var(--gold-dark) transparent;
-    }
-
-    .surah-quick-list::-webkit-scrollbar {
-        width: 4px;
-    }
-
-    .surah-quick-list::-webkit-scrollbar-track {
-        background: transparent;
-    }
-
-    .surah-quick-list::-webkit-scrollbar-thumb {
-        background: var(--gold-dark);
-        border-radius: 2px;
-    }
-
-    .surah-quick-item {
-        display: flex;
-        align-items: center;
-        gap: .8rem;
-        padding: .6rem .9rem;
-        border-radius: 8px;
-        cursor: pointer;
-        transition: all .25s;
-        border: 1px solid transparent;
-    }
-
-    .surah-quick-item:hover {
-        background: rgba(201, 168, 76, .07);
-        border-color: rgba(201, 168, 76, .15);
-    }
-
-    .surah-quick-item.active-surah {
-        background: rgba(201, 168, 76, .12);
-        border-color: var(--gold-border);
-    }
-
-    .surah-num {
-        font-family: 'El Messiri', serif;
-        font-size: .75rem;
-        color: var(--text-dim);
-        min-width: 24px;
-        text-align: center;
-    }
-
-    .surah-name-ar {
-        font-family: 'Amiri', serif;
-        font-size: 1rem;
-        color: var(--text-main);
-        flex: 1;
-    }
-
-    .surah-name-en {
-        font-size: .7rem;
-        color: var(--text-dim);
-    }
-
-    .surah-ayah-count {
-        font-size: .72rem;
-        color: var(--gold-dark);
-        background: rgba(201, 168, 76, .08);
-        padding: .1rem .5rem;
-        border-radius: 50px;
-    }
-
-    /* ── Surah stats card ── */
-    .stats-card {
-        display: none;
-        text-align: center;
-    }
-
-    .stats-name {
-        font-family: 'Amiri', serif;
-        font-size: 2rem;
-        font-weight: 700;
-        color: var(--gold-light);
-        text-shadow: 0 0 25px rgba(201, 168, 76, .4);
-        margin-bottom: .4rem;
-    }
-
-    .stats-row {
-        display: flex;
-        justify-content: center;
-        gap: 1rem;
-        flex-wrap: wrap;
-        margin-top: .8rem;
-    }
-
-    .stat-chip {
-        font-size: .78rem;
-        color: var(--text-muted);
-        background: rgba(201, 168, 76, .07);
-        border: 1px solid rgba(201, 168, 76, .18);
-        padding: .25rem .85rem;
-        border-radius: 50px;
-        display: flex;
-        align-items: center;
-        gap: .35rem;
-    }
-
-    .stat-chip i {
-        color: var(--gold-dark);
-        font-size: .68rem;
-    }
-
-    /* ── Audio card ── */
-    .reciter-select {
-        margin-bottom: 1rem;
-    }
-
-    .play-btn {
-        width: 100%;
-        background: linear-gradient(135deg, var(--gold-dark), var(--gold));
-        color: #060408;
-        border: none;
-        padding: 1rem;
-        border-radius: 50px;
-        font-family: 'El Messiri', serif;
-        font-size: 1rem;
-        font-weight: 700;
-        cursor: pointer;
-        transition: all .35s cubic-bezier(.34, 1.56, .64, 1);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: .7rem;
-        box-shadow: 0 4px 20px rgba(201, 168, 76, .35);
-        position: relative;
-        overflow: hidden;
-        margin-bottom: 1rem;
-    }
-
-    .play-btn::before {
-        content: '';
-        position: absolute;
-        inset: 0;
-        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, .3), transparent);
-        transform: translateX(-200%);
-        transition: transform .6s;
-    }
-
-    .play-btn:hover::before {
-        transform: translateX(200%);
-    }
-
-    .play-btn:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 8px 30px rgba(201, 168, 76, .6);
-    }
-
-    .play-btn:disabled {
-        opacity: .5;
-        cursor: not-allowed;
-        transform: none;
-    }
-
-    /* Custom audio player */
-    #audioPlayer {
-        width: 100%;
-        border-radius: 8px;
-        outline: none;
-        display: none;
-        filter: invert(.85) sepia(.3) hue-rotate(10deg);
-    }
-
-    /* ══════════════════════════════════════
-   READER AREA
-══════════════════════════════════════ */
-    .reader-area {
+    .quran-shell {
         background: var(--white);
         border: 1px solid var(--border-light);
         border-radius: var(--r-lg);
-        overflow: hidden;
         box-shadow: var(--shadow-md);
         position: relative;
-        min-height: 500px;
+        min-height: 55vh;
     }
 
-    .reader-area::before {
+    .quran-shell::before {
         content: '';
         position: absolute;
         top: 0;
@@ -379,277 +71,333 @@
         right: 0;
         height: 3px;
         background: var(--amber);
+        z-index: 2;
     }
 
-    /* ── Welcome / empty state ── */
-    .welcome-state {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        padding: 5rem 3rem;
-        text-align: center;
-        gap: 2rem;
+    @keyframes quran-fade {
+        from {
+            opacity: 0;
+            transform: translateY(14px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
     }
 
-    .welcome-ornament {
-        position: relative;
-        width: 160px;
-        height: 160px;
+    .quran-fade {
+        animation: quran-fade .5s ease both;
     }
 
-    .welcome-ornament .ring1 {
-        position: absolute;
-        inset: 0;
-        border-radius: 50%;
-        border: 1px solid rgba(201, 168, 76, .2);
-        animation: ring-rotate 20s linear infinite;
-    }
-
-    .welcome-ornament .ring2 {
-        position: absolute;
-        inset: 14px;
-        border-radius: 50%;
-        border: 1.5px solid rgba(201, 168, 76, .35);
-        animation: ring-rotate 14s linear infinite reverse;
-    }
-
-    .welcome-ornament .ring3 {
-        position: absolute;
-        inset: 28px;
-        border-radius: 50%;
-        background: radial-gradient(circle, rgba(201, 168, 76, .08), transparent 70%);
-        border: 1px solid rgba(201, 168, 76, .5);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-    .welcome-ornament i {
-        font-size: 2.8rem;
-        color: var(--gold);
-        filter: drop-shadow(0 0 18px rgba(201, 168, 76, .8));
-        animation: mosque-float 4s ease-in-out infinite;
-    }
-
-    .welcome-state h3 {
-        font-family: 'Amiri', serif;
-        font-size: clamp(1.4rem, 3vw, 2rem);
-        color: var(--gold-light);
-        text-shadow: 0 0 25px rgba(201, 168, 76, .3);
-    }
-
-    .welcome-state p {
-        color: var(--text-muted);
-        font-size: .95rem;
-        max-width: 340px;
-        line-height: 1.9;
-    }
-
-    .welcome-verse {
-        font-family: 'Scheherazade New', serif;
-        font-size: clamp(1rem, 2vw, 1.25rem);
-        color: var(--text-dim);
-        text-align: center;
-        padding: 1.2rem 1.8rem;
-        border-top: 1px solid var(--border);
-        border-bottom: 1px solid var(--border);
-        line-height: 2;
-        max-width: 480px;
-    }
-
-    /* ── Loading state ── */
-    .quran-loading {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        padding: 5rem 3rem;
-        gap: 1.2rem;
-    }
-
-    .quran-loading i {
-        font-size: 2.5rem;
-        color: var(--gold);
-        animation: spin-glow 1.2s linear infinite;
-    }
-
-    .quran-loading p {
-        color: var(--text-muted);
-        font-size: 1rem;
+    @keyframes spin {
+        to {
+            transform: rotate(360deg);
+        }
     }
 
     @keyframes spin-glow {
         from {
             transform: rotate(0deg);
-            filter: drop-shadow(0 0 5px rgba(201, 168, 76, .5))
+            filter: drop-shadow(0 0 5px rgba(201, 168, 76, .5));
         }
 
         to {
             transform: rotate(360deg);
-            filter: drop-shadow(0 0 15px rgba(201, 168, 76, .8))
+            filter: drop-shadow(0 0 15px rgba(201, 168, 76, .8));
         }
     }
 
-    /* ── Surah header ── */
-    .surah-header-block {
-        padding: 3rem 3rem 2rem;
+    /* ══════════════════════════════════════
+   ÉCRAN 1 — BROWSE : choisir une sourate
+══════════════════════════════════════ */
+    .browse-view {
+        padding: 3.5rem 2.5rem 3.5rem;
+    }
+
+    .browse-intro {
         text-align: center;
-        border-bottom: 1px solid var(--border);
+        max-width: 640px;
+        margin: 0 auto 2.8rem;
+    }
+
+    .browse-kicker {
+        display: inline-flex;
+        align-items: center;
+        gap: .5rem;
+        font-family: 'Tajawal', sans-serif;
+        font-size: .76rem;
+        font-weight: 600;
+        letter-spacing: .3px;
+        color: var(--amber-dark);
+        background: var(--amber-pale);
+        border: 1px solid var(--amber);
+        padding: .4rem 1.2rem;
+        border-radius: 50px;
+        margin-bottom: 1.3rem;
+    }
+
+    .browse-title {
+        font-family: 'Amiri', serif;
+        font-size: clamp(1.8rem, 4vw, 2.7rem);
+        color: var(--text-dark);
+        margin-bottom: 1.8rem;
+        line-height: 1.3;
+    }
+
+    .browse-search-wrap {
+        position: relative;
+        margin-bottom: 1.4rem;
+    }
+
+    .browse-search {
+        width: 100%;
+        padding: 1.05rem 3.4rem 1.05rem 1.5rem;
+        font-size: 1.05rem;
+        font-family: 'El Messiri', serif;
+        background: var(--cream);
+        border: 1px solid var(--border-light);
+        border-radius: 50px;
+        color: var(--text-dark);
+        outline: none;
+        direction: rtl;
+        transition: all .3s;
+    }
+
+    .browse-search:focus {
+        border-color: var(--amber);
+        box-shadow: 0 0 0 4px rgba(201, 146, 42, .10);
+    }
+
+    .browse-search::placeholder {
+        color: var(--text-dim);
+    }
+
+    .browse-search-wrap i {
+        position: absolute;
+        right: 1.4rem;
+        top: 0;
+        bottom: 0;
+        margin: auto;
+        height: fit-content;
+        color: var(--amber-dark);
+        font-size: .95rem;
+        pointer-events: none;
+    }
+
+    .browse-filters {
+        display: flex;
+        justify-content: center;
+        gap: .6rem;
+        flex-wrap: wrap;
+    }
+
+    .filter-chip {
+        font-family: 'Tajawal', sans-serif;
+        font-size: .82rem;
+        font-weight: 600;
+        color: var(--text-muted);
+        background: var(--cream);
+        border: 1px solid var(--border-light);
+        padding: .5rem 1.4rem;
+        border-radius: 50px;
+        cursor: pointer;
+        transition: all .25s;
+    }
+
+    .filter-chip:hover {
+        border-color: var(--amber);
+        color: var(--amber-dark);
+    }
+
+    .filter-chip.active {
+        background: var(--amber);
+        border-color: var(--amber);
+        color: #1A1208;
+    }
+
+    /* Grille de sourates — beaucoup d'air entre les cartes */
+    .surah-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+        gap: 1.1rem;
+    }
+
+    .surah-card {
+        background: var(--cream);
+        border: 1px solid var(--border-light);
+        border-radius: 16px;
+        padding: 1.6rem 1.2rem;
+        text-align: center;
+        cursor: pointer;
+        transition: transform .3s ease, border-color .3s ease, box-shadow .3s ease;
         position: relative;
         overflow: hidden;
     }
 
-    .surah-header-block::before {
+    .surah-card::before {
         content: '';
         position: absolute;
         inset: 0;
-        background: radial-gradient(ellipse at 50% 0%, rgba(201, 168, 76, .06) 0%, transparent 60%);
+        opacity: 0;
+        background: radial-gradient(circle at 50% -10%, rgba(201, 146, 42, .16), transparent 65%);
+        transition: opacity .3s ease;
     }
 
-    .surah-number-badge {
+    .surah-card:hover,
+    .surah-card:focus-visible {
+        transform: translateY(-4px);
+        border-color: var(--amber);
+        box-shadow: var(--shadow-amber);
+        outline: none;
+    }
+
+    .surah-card:hover::before,
+    .surah-card:focus-visible::before {
+        opacity: 1;
+    }
+
+    .surah-card-num {
         display: inline-flex;
         align-items: center;
-        gap: .5rem;
-        background: var(--gold-pale);
-        border: 1px solid var(--gold-border);
-        padding: .3rem 1rem;
-        border-radius: 50px;
-        font-size: .78rem;
-        color: var(--text-muted);
+        justify-content: center;
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        border: 1px solid var(--amber);
+        color: var(--amber-dark);
         font-family: 'El Messiri', serif;
-        margin-bottom: 1rem;
+        font-size: .82rem;
+        margin-bottom: .9rem;
+        position: relative;
+        z-index: 1;
     }
 
-    .surah-main-name {
+    .surah-card-name {
         font-family: 'Amiri', serif;
-        font-size: clamp(2rem, 5vw, 3.5rem);
-        font-weight: 700;
+        font-size: 1.4rem;
         color: var(--text-dark);
-        /* ✅ Fixed */
-        text-shadow: none;
-        margin-bottom: .5rem;
-        line-height: 1.1;
+        margin-bottom: .25rem;
+        position: relative;
+        z-index: 1;
     }
 
-    .surah-meta-row {
+    .surah-card-en {
+        font-size: .72rem;
+        color: var(--text-dim);
+        margin-bottom: .7rem;
+        position: relative;
+        z-index: 1;
+    }
+
+    .surah-card-meta {
+        font-size: .72rem;
+        color: var(--text-muted);
         display: flex;
         justify-content: center;
-        align-items: center;
-        gap: 1rem;
-        flex-wrap: wrap;
-        margin-top: .8rem;
+        gap: .5rem;
+        position: relative;
+        z-index: 1;
+        font-family: 'Tajawal', sans-serif;
     }
 
-    .surah-meta-chip {
-        display: inline-flex;
-        align-items: center;
-        gap: .4rem;
-        font-size: .8rem;
-        color: var(--text-muted);
-        background: rgba(201, 168, 76, .06);
-        border: 1px solid rgba(201, 168, 76, .15);
-        padding: .3rem .9rem;
-        border-radius: 50px;
+    .surah-card-meta span:first-child::after {
+        content: '•';
+        margin-right: .5rem;
+        color: var(--border-light);
     }
 
-    .surah-meta-chip i {
-        color: var(--gold-dark);
-        font-size: .7rem;
-    }
-
-    /* ── Bismillah ── */
-    .bismillah-block {
-        font-family: 'Scheherazade New', serif;
-        font-size: clamp(1.6rem, 4vw, 2.4rem);
-        color: var(--amber-dark);
-        /* ✅ Fixed */
+    .browse-empty {
+        grid-column: 1 / -1;
         text-align: center;
-        padding: 2.5rem 2rem;
-        border-bottom: 1px solid var(--border-light);
-        line-height: 1.8;
-        position: relative;
-        background: var(--amber-pale);
+        padding: 3.5rem 1rem;
+        color: var(--text-muted);
+        font-family: 'Tajawal', sans-serif;
     }
 
-    .bismillah-block::before,
-    .bismillah-block::after {
-        content: '❖';
-        font-size: .9rem;
+    .browse-empty i {
+        font-size: 1.7rem;
         color: var(--amber);
-        margin: 0 1rem;
-        vertical-align: middle;
+        display: block;
+        margin-bottom: .9rem;
     }
 
-    /* ── Quran text area ── */
-    .quran-text-wrap {
-        padding: 2.5rem 3rem;
-        position: relative;
-    }
-
-    .quran-text {
-        font-family: 'Scheherazade New', serif;
-        font-size: clamp(1.3rem, 2.5vw, 1.7rem);
-        color: var(--text-dark);
-        /* ✅ Fixed: was var(--text-bright) */
-        line-height: 2.8;
-        text-align: justify;
-        direction: rtl;
-        word-spacing: 3px;
-        letter-spacing: .5px;
-    }
-
-    /* Ayah number ornament */
-    .ayah-num {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        width: 32px;
-        height: 32px;
-        background: linear-gradient(135deg, rgba(201, 168, 76, .10), rgba(201, 168, 76, .20));
-        border: 1px solid rgba(201, 168, 76, .30);
-        border-radius: 50%;
-        font-family: 'El Messiri', serif;
-        font-size: .78rem;
-        color: var(--gold);
-        margin: 0 4px;
-        vertical-align: middle;
-        cursor: default;
-        transition: all .2s;
-        flex-shrink: 0;
-    }
-
-    .ayah-num:hover {
-        background: rgba(201, 168, 76, .25);
-        border-color: var(--gold);
-        box-shadow: 0 0 10px rgba(201, 168, 76, .3);
-        transform: scale(1.1);
-    }
-
-    /* ── Font size controls ── */
-    .reader-toolbar {
+    /* ══════════════════════════════════════
+   ÉCRAN 2 — READING : mode lecture immersif
+══════════════════════════════════════ */
+    .reading-topbar {
+        position: sticky;
+        top: 96px;
+        z-index: 5;
         display: flex;
         align-items: center;
         justify-content: space-between;
-        padding: 1rem 2rem;
-        border-top: 1px solid var(--border-light);
-        background: var(--cream);
+        gap: 1rem;
         flex-wrap: wrap;
+        padding: 1.1rem 2rem;
+        background: rgba(255, 255, 255, .94);
+        backdrop-filter: blur(10px);
+        border-bottom: 1px solid var(--border-light);
+        border-radius: var(--r-lg) var(--r-lg) 0 0;
+    }
+
+    .back-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: .5rem;
+        background: none;
+        border: 1px solid var(--border-light);
+        color: var(--text-muted);
+        padding: .55rem 1.15rem;
+        border-radius: 50px;
+        font-family: 'Tajawal', sans-serif;
+        font-size: .82rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all .25s;
+        white-space: nowrap;
+    }
+
+    .back-btn:hover {
+        border-color: var(--amber);
+        color: var(--amber-dark);
+    }
+
+    .topbar-surah-info {
+        font-family: 'Amiri', serif;
+        font-size: 1.15rem;
+        color: var(--text-dark);
+        display: flex;
+        align-items: baseline;
+        gap: .6rem;
+        flex-wrap: wrap;
+    }
+
+    .topbar-surah-info small {
+        font-family: 'Tajawal', sans-serif;
+        font-size: .74rem;
+        color: var(--text-muted);
+        font-weight: 400;
+    }
+
+    .topbar-tools {
+        display: flex;
+        align-items: center;
         gap: .8rem;
     }
 
     .font-controls {
         display: flex;
         align-items: center;
-        gap: .6rem;
+        gap: .5rem;
     }
 
     .font-btn {
-        width: 32px;
-        height: 32px;
+        width: 30px;
+        height: 30px;
         background: var(--amber-pale);
         border: 1px solid var(--amber);
-        border-radius: 6px;
+        border-radius: 8px;
         color: var(--amber-dark);
         font-family: 'Tajawal', sans-serif;
         font-size: 1rem;
@@ -664,72 +412,221 @@
     .font-btn:hover {
         background: var(--amber);
         color: #1A1208;
-        transform: scale(1.05);
     }
 
     .font-size-label {
-        font-size: .8rem;
+        font-size: .76rem;
         color: var(--text-muted);
-        font-family: 'Tajawal', sans-serif;
-        min-width: 50px;
+        min-width: 42px;
         text-align: center;
+        font-family: 'Tajawal', sans-serif;
     }
 
-    .page-info {
-        font-size: .82rem;
-        color: var(--text-muted);
-    }
-
-    /* ── Juz/Surah navigation footer ── */
-    .surah-nav {
+    .icon-toggle-btn {
+        width: 36px;
+        height: 36px;
         display: flex;
-        justify-content: space-between;
         align-items: center;
-        padding: 1.2rem 2rem;
-        border-top: 1px solid var(--border-light);
-        background: var(--cream);
-        flex-wrap: wrap;
-        gap: .8rem;
-    }
-
-    .surah-nav-btn {
-        display: inline-flex;
-        align-items: center;
-        gap: .5rem;
+        justify-content: center;
         background: var(--amber-pale);
         border: 1px solid var(--amber);
+        border-radius: 8px;
         color: var(--amber-dark);
-        padding: .6rem 1.3rem;
-        border-radius: 4px;
-        font-size: .85rem;
-        font-family: 'Tajawal', sans-serif;
-        font-weight: 600;
         cursor: pointer;
-        transition: all .3s;
+        transition: all .25s;
+        font-size: .9rem;
     }
 
-    .surah-nav-btn:hover {
+    .icon-toggle-btn:hover,
+    .icon-toggle-btn.is-active {
         background: var(--amber);
         color: #1A1208;
+    }
+
+    /* ── Dock audio : carte claire, cohérente avec le reste du lecteur ──
+       (on n'utilise plus --panel/--gold/--text-main : invisibles sur le site réel) */
+    .audio-dock {
+        background: var(--cream);
+        border-bottom: 1px solid var(--border-light);
+        padding: 1.1rem 2rem;
+        position: relative;
+    }
+
+    .audio-dock::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 10%;
+        right: 10%;
+        height: 1px;
+        background: linear-gradient(90deg, transparent, var(--amber), transparent);
+        opacity: .6;
+    }
+
+    .dock-row {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        flex-wrap: wrap;
+    }
+
+    .dock-icon {
+        color: var(--amber-dark);
+        font-size: 1rem;
+        flex-shrink: 0;
+    }
+
+    .dock-select {
+        flex: 1;
+        min-width: 170px;
+        padding: .65rem 1rem;
+        font-family: 'El Messiri', serif;
+        font-size: .88rem;
+        background: var(--white);
+        border: 1px solid var(--border-light);
+        border-radius: 10px;
+        color: var(--text-dark);
+        outline: none;
+        cursor: pointer;
+        direction: rtl;
+        transition: border-color .25s;
+    }
+
+    .dock-select:focus {
         border-color: var(--amber);
+    }
+
+    .dock-select option {
+        background: var(--white);
+        color: var(--text-dark);
+    }
+
+    .dock-play-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: .55rem;
+        background: linear-gradient(135deg, var(--amber-dark), var(--amber));
+        color: #ffffff;
+        border: none;
+        padding: .68rem 1.5rem;
+        border-radius: 50px;
+        font-family: 'El Messiri', serif;
+        font-size: .86rem;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all .3s;
+        white-space: nowrap;
+    }
+
+    .dock-play-btn:hover {
         transform: translateY(-2px);
         box-shadow: var(--shadow-amber);
     }
 
-    .surah-nav-btn:disabled {
-        opacity: .35;
-        cursor: default;
-        transform: none;
-        box-shadow: none;
+    .dock-hover-wrap {
+        display: flex;
+        align-items: center;
+        gap: .55rem;
+        flex-shrink: 0;
     }
 
-    /* ── Error state ── */
+    .dock-hover-label {
+        font-size: .72rem;
+        color: var(--text-muted);
+        font-family: 'Tajawal', sans-serif;
+        white-space: nowrap;
+    }
+
+    .toggle-switch {
+        position: relative;
+        width: 38px;
+        height: 21px;
+        flex-shrink: 0;
+        cursor: pointer;
+    }
+
+    .toggle-switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+    }
+
+    .toggle-slider {
+        position: absolute;
+        inset: 0;
+        background: #E5DCC6;
+        border: 1px solid var(--border-light);
+        border-radius: 22px;
+        transition: all .3s;
+    }
+
+    .toggle-slider::before {
+        content: '';
+        position: absolute;
+        width: 15px;
+        height: 15px;
+        left: 2px;
+        top: 2px;
+        background: #ffffff;
+        border-radius: 50%;
+        transition: all .3s;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, .25);
+    }
+
+    .toggle-switch input:checked+.toggle-slider {
+        background: var(--amber-pale);
+        border-color: var(--amber);
+    }
+
+    .toggle-switch input:checked+.toggle-slider::before {
+        transform: translateX(17px);
+        background: var(--amber-dark);
+    }
+
+    #audioPlayer {
+        width: 100%;
+        margin-top: .9rem;
+        border-radius: 8px;
+        outline: none;
+        display: none;
+    }
+
+    /* ── Colonne de lecture : centrée, largeur de ligne confortable ── */
+    .reading-column {
+        padding: 0 1.5rem 3.5rem;
+    }
+
+    .reading-inner {
+        max-width: 740px;
+        margin: 0 auto;
+    }
+
+    .quran-loading {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 5rem 3rem;
+        gap: 1.2rem;
+    }
+
+    .quran-loading i {
+        font-size: 2.5rem;
+        color: var(--amber);
+        animation: spin-glow 1.2s linear infinite;
+    }
+
+    .quran-loading p {
+        color: var(--text-muted);
+        font-size: 1rem;
+    }
+
     .quran-error {
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        padding: 4rem 3rem;
+        padding: 4.5rem 3rem;
         gap: 1rem;
         text-align: center;
     }
@@ -750,110 +647,260 @@
         font-size: .9rem;
     }
 
-    /* ── Audio player — light theme ── */
-    #audioPlayer {
-        width: 100%;
-        border-radius: 6px;
-        outline: none;
-        display: none;
-        margin-top: .5rem;
+    .bismillah-block {
+        font-family: 'Scheherazade New', serif;
+        font-size: clamp(1.7rem, 4vw, 2.5rem);
+        color: var(--amber-dark);
+        text-align: center;
+        padding: 1.8rem 1rem 2.6rem;
+        line-height: 1.8;
     }
 
-    /* ── Surah meta chips ── */
-    .surah-number-badge {
+    .bismillah-block::before,
+    .bismillah-block::after {
+        content: '❖';
+        font-size: .85rem;
+        color: var(--amber);
+        margin: 0 1rem;
+        vertical-align: middle;
+    }
+
+    /* ── Une ayah = un bloc, jamais un mur de texte continu ── */
+    .quran-text {
+        display: flex;
+        flex-direction: column;
+        direction: rtl;
+    }
+
+    .ayah-block {
+        display: block;
+        font-family: 'Scheherazade New', serif;
+        font-size: clamp(1.4rem, 2.7vw, 1.9rem);
+        color: var(--text-dark);
+        line-height: 2.5;
+        text-align: justify;
+        word-spacing: 3px;
+        letter-spacing: .4px;
+        padding: 1.5rem 1.3rem;
+        margin: 0 0 .4rem;
+        border-radius: 14px;
+        border-bottom: 1px solid rgba(201, 146, 42, .12);
+        cursor: pointer;
+        transition: background .35s ease;
+    }
+
+    .ayah-block:last-child {
+        border-bottom: none;
+        margin-bottom: 0;
+    }
+
+    .ayah-block:hover {
+        background: rgba(201, 146, 42, .07);
+    }
+
+    .ayah-block:focus-visible {
+        outline: 2px solid var(--amber);
+        outline-offset: 3px;
+        background: rgba(201, 146, 42, .08);
+    }
+
+    .ayah-block.ayah-playing {
+        background: rgba(201, 146, 42, .14);
+        border-radius: 14px;
+    }
+
+    .ayah-num {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 34px;
+        height: 34px;
+        background: linear-gradient(135deg, rgba(201, 146, 42, .10), rgba(201, 146, 42, .20));
+        border: 1px solid rgba(201, 146, 42, .30);
+        border-radius: 50%;
+        font-family: 'El Messiri', serif;
+        font-size: .8rem;
+        color: var(--amber-dark);
+        margin: 0 4px;
+        vertical-align: middle;
+        transition: all .25s;
+        flex-shrink: 0;
+    }
+
+    .ayah-block:hover .ayah-num {
+        background: rgba(201, 146, 42, .32);
+        border-color: var(--amber);
+        transform: scale(1.08);
+    }
+
+    .ayah-block.ayah-playing .ayah-num {
+        background: var(--amber);
+        color: #3A2305;
+        border-color: var(--amber);
+        animation: ayah-pulse 1.4s ease-in-out infinite;
+    }
+
+    @keyframes ayah-pulse {
+
+        0%,
+        100% {
+            box-shadow: 0 0 0 0 rgba(201, 146, 42, .45);
+        }
+
+        50% {
+            box-shadow: 0 0 0 7px rgba(201, 146, 42, 0);
+        }
+    }
+
+    /* ── Pagination des ayahs ── */
+    .ayah-page-nav {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 1.2rem;
+        padding: 1.6rem 0 .4rem;
+        flex-wrap: wrap;
+    }
+
+    .page-nav-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: .4rem;
+        background: var(--amber-pale);
+        border: 1px solid var(--amber);
+        color: var(--amber-dark);
+        padding: .5rem 1.1rem;
+        border-radius: 4px;
+        font-size: .8rem;
+        font-family: 'Tajawal', sans-serif;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all .3s;
+    }
+
+    .page-nav-btn:hover:not(:disabled) {
+        background: var(--amber);
+        color: #1A1208;
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-amber);
+    }
+
+    .page-nav-btn:disabled {
+        opacity: .35;
+        cursor: default;
+        transform: none;
+        box-shadow: none;
+    }
+
+    .page-indicator {
+        font-family: 'Tajawal', sans-serif;
+        font-size: .8rem;
+        color: var(--text-muted);
+        text-align: center;
+    }
+
+    .page-size-select {
+        font-size: .76rem;
+        font-family: 'Tajawal', sans-serif;
+        color: var(--text-muted);
+        background: var(--white);
+        border: 1px solid var(--border-light);
+        border-radius: 50px;
+        padding: .4rem .95rem;
+        outline: none;
+        cursor: pointer;
+        direction: rtl;
+    }
+
+    /* ── Navigation sourate précédente / suivante ── */
+    .surah-nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 2rem 0 0;
+        border-top: 1px solid var(--border-light);
+        margin-top: 2rem;
+        flex-wrap: wrap;
+        gap: .8rem;
+    }
+
+    .surah-nav-btn {
         display: inline-flex;
         align-items: center;
         gap: .5rem;
         background: var(--amber-pale);
         border: 1px solid var(--amber);
-        padding: .3rem 1rem;
-        border-radius: 50px;
-        font-size: .78rem;
         color: var(--amber-dark);
+        padding: .65rem 1.4rem;
+        border-radius: 4px;
+        font-size: .85rem;
         font-family: 'Tajawal', sans-serif;
-        margin-bottom: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all .3s;
     }
 
-    .surah-meta-row {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        gap: 1rem;
-        flex-wrap: wrap;
-        margin-top: .8rem;
+    .surah-nav-btn:hover:not(:disabled) {
+        background: var(--amber);
+        color: #1A1208;
+        border-color: var(--amber);
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-amber);
     }
 
-    .surah-meta-chip {
-        display: inline-flex;
-        align-items: center;
-        gap: .4rem;
-        font-size: .8rem;
+    .surah-nav-btn:disabled {
+        opacity: .35;
+        cursor: default;
+        transform: none;
+        box-shadow: none;
+    }
+
+    .surah-nav-indicator {
+        font-family: 'Tajawal', sans-serif;
+        font-size: .82rem;
         color: var(--text-muted);
-        background: var(--cream);
-        border: 1px solid var(--border-light);
-        padding: .3rem .9rem;
-        border-radius: 50px;
     }
 
-    .surah-meta-chip i {
-        color: var(--amber);
-        font-size: .7rem;
-    }
+    @media (prefers-reduced-motion: reduce) {
 
-    /* Surah header block */
-    .surah-header-block {
-        padding: 2.5rem 3rem 2rem;
-        text-align: center;
-        border-bottom: 1px solid var(--border-light);
-        position: relative;
-        overflow: hidden;
-        background: var(--white);
-    }
-
-    .surah-header-block::before {
-        content: '';
-        position: absolute;
-        inset: 0;
-        background: radial-gradient(ellipse at 50% 0%, rgba(201, 146, 42, .05) 0%, transparent 60%);
-    }
-
-    /* ── Fade animation ── */
-    @keyframes quran-fade {
-        from {
-            opacity: 0;
-            transform: translateY(15px);
-        }
-
-        to {
-            opacity: 1;
-            transform: translateY(0);
+        .quran-loading i,
+        .ayah-block.ayah-playing .ayah-num,
+        .quran-fade {
+            animation: none !important;
         }
     }
 
-    .quran-fade {
-        animation: quran-fade .6s ease both;
-    }
+    @media (max-width:768px) {
+        .reading-topbar {
+            top: 0;
+            padding: .9rem 1.2rem;
+        }
 
-    @media (max-width:600px) {
-        .quran-text-wrap {
-            padding: 1.8rem 1.4rem;
+        .audio-dock {
+            padding: .9rem 1.2rem;
+        }
+
+        .browse-view {
+            padding: 2.4rem 1.3rem 2.8rem;
+        }
+
+        .reading-column {
+            padding: 0 .6rem 2.5rem;
         }
 
         .surah-header-block {
-            padding: 2rem 1.4rem 1.5rem;
+            padding: 2.2rem 1rem 1.4rem;
         }
 
-        .reader-toolbar,
-        .surah-nav {
-            padding: 1rem;
+        .ayah-block {
+            padding: 1.2rem .9rem;
         }
 
         .bismillah-block {
-            font-size: 1.4rem;
-            padding: 1.8rem 1rem;
+            font-size: 1.5rem;
+            padding: 1.5rem 1rem 2rem;
         }
     }
-
 </style>
 {% endblock %}
 
@@ -862,7 +909,7 @@
 <!-- ═══════════════ PAGE HEADER ═══════════════ -->
 <div class="page-header">
     <div class="container">
-                <div style="font-family:'Scheherazade New',serif;font-size:1.4rem;
+        <div style="font-family:'Scheherazade New',serif;font-size:1.4rem;
             color:var(--gold-light);letter-spacing:3px;margin-bottom:.8rem;
             text-shadow:0 0 20px rgba(201,168,76,.5);opacity:.9;">﷽</div>
         <h1 class="page-title">
@@ -879,85 +926,94 @@
 <section class="quran-section">
     <div class="container">
 
-        <div class="quran-layout">
+        <div class="quran-shell" id="quranShell">
 
-            <!-- ══════ SIDEBAR ══════ -->
-            <aside class="quran-sidebar">
+            <!-- ═══ ÉCRAN 1 : CHOISIR UNE SOURATE ═══ -->
+            <div class="browse-view" id="browseView">
 
-                <!-- Surah Selector Card -->
-                <div class="sidebar-card">
-                    <div class="card-head">
-                        <i class="fas fa-list-ul"></i>
-                        السور الكريمة
-                    </div>
-                    <!-- Search -->
-                    <div class="search-wrap">
+                <div class="browse-intro">
+                    <div class="browse-kicker"><i class="fas fa-book-quran"></i> ١١٤ سورة</div>
+                    <h2 class="browse-title">اختر سورة لتبدأ القراءة</h2>
+
+                    <div class="browse-search-wrap">
                         <i class="fas fa-search"></i>
-                        <input type="text" class="surah-search" id="surahSearch" placeholder="ابحث عن سورة..."
-                            oninput="filterSurahs(this.value)" style="width:100%;">
+                        <input type="text" id="browseSearch" class="browse-search"
+                            placeholder="ابحث باسم السورة أو رقمها..." oninput="filterBrowse(this.value)">
                     </div>
-                    <!-- Quick list -->
-                    <div class="surah-quick-list" id="surahList"></div>
 
-                    <!-- Hidden select for audio -->
-                    <select id="surahSelect" style="display:none;"></select>
+                    <div class="browse-filters">
+                        <button class="filter-chip active" data-filter="all" onclick="setBrowseFilter('all')">كل
+                            السور</button>
+                        <button class="filter-chip" data-filter="مكية" onclick="setBrowseFilter('مكية')">مكية</button>
+                        <button class="filter-chip" data-filter="مدنية"
+                            onclick="setBrowseFilter('مدنية')">مدنية</button>
+                    </div>
                 </div>
 
-                <!-- Stats Card -->
-                <div class="sidebar-card stats-card" id="surah-stats">
-                    <div class="stats-name" id="stats-name"></div>
-                    <div class="stats-row" id="stats-row"></div>
-                </div>
+                <div class="surah-grid" id="surahGrid"></div>
 
-                <!-- Audio Card -->
-                <div class="sidebar-card" id="audioSection" style="display:none;">
-                    <div class="card-head">
-                        <i class="fas fa-headphones"></i>
-                        الاستماع
-                    </div>
-                    <select id="reciterSelect" class="qselect reciter-select">
-                        <option value="ar.alafasy" style="background:#0F0F1A;">مشاري العفاسي</option>
-                        <option value="ar.abdulbasitmurattal" style="background:#0F0F1A;">عبد الباسط — مرتّل</option>
-                        <option value="ar.abdullahbasfar" style="background:#0F0F1A;">عبدالله بصفر</option>
-                        <option value="ar.husary" style="background:#0F0F1A;">محمود خليل الحصري</option>
-                        <option value="ar.minshawi" style="background:#0F0F1A;">محمد صديق المنشاوي</option>
-                    </select>
-                    <button class="play-btn" id="playBtn" onclick="playAudio()">
-                        <i class="fas fa-play-circle"></i>
-                        استمع للسورة
+                <!-- Select caché, conservé pour compatibilité avec d'autres scripts du site -->
+                <select id="surahSelect" style="display:none;" onchange="loadSurah()"></select>
+            </div>
+
+            <!-- ═══ ÉCRAN 2 : MODE LECTURE ═══ -->
+            <div class="reading-view" id="readingView" style="display:none;">
+
+                <div class="reading-topbar">
+                    <button class="back-btn" onclick="showBrowseView()">
+                        <i class="fas fa-grip"></i> كل السور
                     </button>
+                    <div class="topbar-surah-info" id="topbarSurahInfo"></div>
+                    <div class="topbar-tools">
+                        <select class="page-size-select" id="pageSizeSelect" onchange="changePageSize(this.value)"
+                            title="عدد الآيات في كل صفحة">
+                            <option value="10">١٠ آيات / صفحة</option>
+                            <option value="20">٢٠ آية / صفحة</option>
+                            <option value="50">٥٠ آية / صفحة</option>
+                            <option value="9999">السورة كاملة</option>
+                        </select>
+                        <div class="font-controls">
+                            <button class="font-btn" onclick="adjustFont(-0.15)" title="تصغير الخط">−</button>
+                            <span class="font-size-label" id="fontSizeLabel">100%</span>
+                            <button class="font-btn" onclick="adjustFont(0.15)" title="تكبير الخط">+</button>
+                        </div>
+                        <button class="icon-toggle-btn" id="focusModeBtn" onclick="toggleFocusMode()"
+                            title="وضع القراءة الكامل">
+                            <i class="fas fa-expand"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="audio-dock">
+                    <div class="dock-row">
+                        <i class="fas fa-headphones dock-icon"></i>
+                        <select id="reciterSelect" class="dock-select">
+                            <option value="ar.alafasy">مشاري العفاسي</option>
+                            <option value="ar.abdulbasitmurattal">عبد الباسط — مرتّل</option>
+                            <option value="ar.abdullahbasfar">عبدالله بصفر</option>
+                            <option value="ar.husary">محمود خليل الحصري</option>
+                            <option value="ar.minshawi">محمد صديق المنشاوي</option>
+                        </select>
+                        <button class="dock-play-btn" onclick="playAudio()">
+                            <i class="fas fa-play-circle"></i> السورة كاملة
+                        </button>
+                        <div class="dock-hover-wrap">
+                            <span class="dock-hover-label"><i class="fas fa-hand-pointer"></i> صوت تلقائي عند
+                                المرور</span>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="hoverAudioCheckbox" checked
+                                    onchange="toggleHoverAudio(this.checked)">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                    </div>
                     <audio id="audioPlayer" controls></audio>
                 </div>
 
-            </aside>
-
-            <!-- ══════ READER ══════ -->
-            <div class="reader-area" id="readerArea">
-
-                <!-- Welcome state -->
-                <div class="welcome-state" id="welcomeState">
-                    <div class="welcome-ornament">
-                        <div class="ring1"></div>
-                        <div class="ring2"></div>
-                        <div class="ring3">
-                            <i class="fas fa-book-quran"></i>
-                        </div>
-                    </div>
-                    <h3>اختر سورة للبدء</h3>
-                    <p>اختر سورة من القائمة على الجانب لقراءة آياتها والاستماع إليها</p>
-                    <div class="welcome-verse">
-                        إِنَّ هَٰذَا الْقُرْآنَ يَهْدِي لِلَّتِي هِيَ أَقْوَمُ
-                        <div
-                            style="font-family:'El Messiri',serif;font-size:.78rem;color:var(--text-dim);margin-top:.5rem;letter-spacing:1px;">
-                            سورة الإسراء — الآية ٩
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Content (filled dynamically) -->
-                <div id="quranContent" style="display:none;"></div>
+                <div class="reading-column" id="readingColumn"></div>
 
             </div>
+
         </div>
     </div>
 </section>
@@ -967,15 +1023,31 @@
 {% block extra_js %}
 <script>
     // ═══════════════════════════════════════════════════
-    // QURAN PAGE — Full Enhanced JS
+    // QURAN PAGE — JS
     // ═══════════════════════════════════════════════════
 
     let currentSurah = 0;
-    let currentFontSize = 1.6;   // rem
-    const MIN_FONT = 1.1;
-    const MAX_FONT = 2.4;
+    let currentSurahData = null;
 
-    /* ── Complete Surah list ── */
+    let currentFontSize = 1.7;   // rem
+    const MIN_FONT = 1.1;
+    const MAX_FONT = 2.5;
+
+    let currentPage = 1;
+    let pageSize = 10;
+
+    let hoverAudioEnabled = true;
+    let hoverTimer = null;
+    const HOVER_DELAY = 280;
+
+    let browseSearchQuery = '';
+    let browseFilterType = 'all';
+
+    const ayahAudio = new Audio();
+    let activeAyahEl = null;
+    let activeAyahNum = null;
+
+    /* ── Liste complète des sourates ── */
     const SURAHS = [
         { n: 1, ar: 'الفاتحة', en: 'Al-Fatihah', v: 7, type: 'مكية' },
         { n: 2, ar: 'البقرة', en: 'Al-Baqarah', v: 286, type: 'مدنية' },
@@ -1093,69 +1165,113 @@
         { n: 114, ar: 'الناس', en: 'An-Nas', v: 6, type: 'مكية' }
     ];
 
-    /* ── Init ── */
+    /* ── Init : on affiche l'écran "choisir une sourate", aucun contenu chargé d'avance ── */
     document.addEventListener('DOMContentLoaded', () => {
-        buildSurahList(SURAHS);
-        // Auto-load Al-Fatiha
-        setTimeout(() => selectSurah(1), 400);
+        populateHiddenSelect();
+        applyBrowseFilter();
     });
 
-    /* ── Build list ── */
-    function buildSurahList(list) {
-        const el = document.getElementById('surahList');
-        el.innerHTML = list.map(s => `
-        <div class="surah-quick-item" id="sqitem-${s.n}" onclick="selectSurah(${s.n})">
-            <span class="surah-num">${toAr(s.n)}</span>
-            <span class="surah-name-ar">${s.ar}</span>
-            <span class="surah-ayah-count">${toAr(s.v)}</span>
+    function populateHiddenSelect() {
+        const sel = document.getElementById('surahSelect');
+        if (!sel) return;
+        sel.innerHTML = SURAHS.map(s => `<option value="${s.n}">${s.n}. ${s.ar}</option>`).join('');
+    }
+
+    /* ══════════════════ ÉCRAN 1 : BROWSE ══════════════════ */
+
+    function buildSurahGrid(list) {
+        const grid = document.getElementById('surahGrid');
+        if (!list.length) {
+            grid.innerHTML = `
+            <div class="browse-empty">
+                <i class="fas fa-search"></i>
+                لم يتم العثور على أي سورة مطابقة لبحثك
+            </div>
+        `;
+            return;
+        }
+        grid.innerHTML = list.map(s => `
+        <div class="surah-card quran-fade" tabindex="0" role="button" aria-label="افتح سورة ${s.ar}"
+            onclick="selectSurah(${s.n})"
+            onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();selectSurah(${s.n})}">
+            <div class="surah-card-num">${toAr(s.n)}</div>
+            <div class="surah-card-name">${s.ar}</div>
+            <div class="surah-card-en">${s.en}</div>
+            <div class="surah-card-meta"><span>${toAr(s.v)} آية</span><span>${s.type}</span></div>
         </div>
     `).join('');
     }
 
-    /* ── Filter ── */
-    function filterSurahs(q) {
-        const filtered = SURAHS.filter(s =>
-            s.ar.includes(q) || s.en.toLowerCase().includes(q.toLowerCase()) || String(s.n).includes(q)
-        );
-        buildSurahList(filtered);
+    function filterBrowse(q) {
+        browseSearchQuery = q;
+        applyBrowseFilter();
     }
 
-    /* ── Select & Load ── */
+    function setBrowseFilter(type) {
+        browseFilterType = type;
+        document.querySelectorAll('.filter-chip').forEach(c => c.classList.toggle('active', c.dataset.filter === type));
+        applyBrowseFilter();
+    }
+
+    function applyBrowseFilter() {
+        const q = browseSearchQuery.trim();
+        const filtered = SURAHS.filter(s => {
+            const matchesQuery = !q || s.ar.includes(q) || s.en.toLowerCase().includes(q.toLowerCase()) || String(s.n).includes(q);
+            const matchesType = browseFilterType === 'all' || s.type === browseFilterType;
+            return matchesQuery && matchesType;
+        });
+        buildSurahGrid(filtered);
+    }
+
+    function showBrowseView() {
+        stopAyahAudio();
+        const player = document.getElementById('audioPlayer');
+        player.pause();
+        player.style.display = 'none';
+        document.getElementById('readingView').style.display = 'none';
+        document.getElementById('browseView').style.display = 'block';
+        document.body.classList.remove('quran-focus-mode');
+    }
+
+    /* ══════════════════ ÉCRAN 2 : READING ══════════════════ */
+
     function selectSurah(num) {
         currentSurah = num;
+        currentPage = 1;
+        stopAyahAudio();
 
-        // Highlight in list
-        document.querySelectorAll('.surah-quick-item').forEach(el => el.classList.remove('active-surah'));
-        const activeEl = document.getElementById(`sqitem-${num}`);
-        if (activeEl) {
-            activeEl.classList.add('active-surah');
-            activeEl.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
-        }
+        const player = document.getElementById('audioPlayer');
+        player.pause();
+        player.style.display = 'none';
 
-        // Update hidden select
         const sel = document.getElementById('surahSelect');
         if (sel) sel.value = num;
 
-        // ✅ FIX: directly replace readerArea — no null pointer on welcomeState/quranContent
-        document.getElementById('readerArea').innerHTML = `
+        document.getElementById('browseView').style.display = 'none';
+        document.getElementById('readingView').style.display = 'block';
+
+        const s = SURAHS[num - 1];
+        document.getElementById('topbarSurahInfo').innerHTML = `${s ? s.ar : ''} <small>جارٍ التحميل...</small>`;
+
+        document.getElementById('readingColumn').innerHTML = `
         <div class="quran-loading">
-            <i class="fas fa-spinner" style="animation:spin .9s linear infinite;font-size:2.5rem;color:var(--amber);display:block;margin-bottom:1rem;"></i>
-            <p style="color:var(--text-muted);font-size:1rem;">جاري تحميل سورة ${SURAHS[num - 1]?.ar || ''}...</p>
+            <i class="fas fa-spinner"></i>
+            <p>جاري تحميل سورة ${s ? s.ar : ''}...</p>
         </div>
     `;
 
+        document.getElementById('quranShell').scrollIntoView({ behavior: 'smooth', block: 'start' });
         loadSurahData(num);
     }
 
-    /* ── Fetch from API ── */
     async function loadSurahData(num) {
         try {
             const res = await fetch(`https://api.alquran.cloud/v1/surah/${num}`);
             const data = await res.json();
 
             if (data.code === 200) {
-                renderSurah(data.data);
-                updateStats(data.data);
+                currentSurahData = data.data;
+                renderSurah(currentSurahData);
             } else {
                 showReaderError('فشل تحميل السورة، حاول مجدداً');
             }
@@ -1164,103 +1280,119 @@
         }
     }
 
-    /* ── Render surah ── */
     function renderSurah(surah) {
-        const s = SURAHS[surah.number - 1];
-        const showBismillah = surah.number !== 1 && surah.number !== 9;
+        document.getElementById('topbarSurahInfo').innerHTML = `
+        ${surah.name}
+        <small>${toAr(surah.numberOfAyahs)} آية • ${surah.revelationType === 'Meccan' ? 'مكية' : 'مدنية'}</small>
+    `;
 
-        let ayahsHtml = '';
-        surah.ayahs.forEach(a => {
-            ayahsHtml += `${a.text} <span class="ayah-num" title="آية ${toAr(a.numberInSurah)}">${toAr(a.numberInSurah)}</span> `;
-        });
+        const totalPages = Math.max(1, Math.ceil(surah.ayahs.length / pageSize));
+        if (currentPage > totalPages) currentPage = 1;
 
-        document.getElementById('readerArea').innerHTML = `
-        <div class="surah-header-block quran-fade">
-            <div class="surah-number-badge">
-                <i class="fas fa-bookmark"></i>
-                السورة ${toAr(surah.number)}
-            </div>
-            <div class="surah-main-name">${surah.name}</div>
-            <div class="surah-meta-row">
-                <span class="surah-meta-chip">
-                    <i class="fas fa-list-ol"></i>
-                    ${toAr(surah.numberOfAyahs)} آية
-                </span>
-                <span class="surah-meta-chip">
-                    <i class="fas fa-map-marker-alt"></i>
-                    ${surah.revelationType === 'Meccan' ? 'مكية' : 'مدنية'}
-                </span>
-                <span class="surah-meta-chip">
-                    <i class="fas fa-layer-group"></i>
-                    الجزء ${toAr(surah.ayahs[0]?.juz || 1)}
-                </span>
-            </div>
-        </div>
+        document.getElementById('readingColumn').innerHTML = `
+        <div class="reading-inner">
 
-        ${showBismillah ? `<div class="bismillah-block quran-fade">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</div>` : ''}
+            <div id="bismillahSlot"></div>
 
-        <!-- Toolbar -->
-        <div class="reader-toolbar">
-            <div class="font-controls">
-                <button class="font-btn" onclick="adjustFont(-0.15)" title="تصغير الخط">−</button>
-                <span class="font-size-label" id="fontSizeLabel">${Math.round(currentFontSize * 10)}%</span>
-                <button class="font-btn" onclick="adjustFont(+0.15)" title="تكبير الخط">+</button>
+            <div class="quran-text" id="quranText"></div>
+            <div class="ayah-page-nav" id="ayahPageNav"></div>
+
+            <div class="surah-nav">
+                <button class="surah-nav-btn" onclick="navigateSurah(-1)" ${surah.number <= 1 ? 'disabled' : ''}>
+                    <i class="fas fa-chevron-right"></i> السورة السابقة
+                </button>
+                <span class="surah-nav-indicator">${toAr(surah.number)} / ١١٤</span>
+                <button class="surah-nav-btn" onclick="navigateSurah(1)" ${surah.number >= 114 ? 'disabled' : ''}>
+                    السورة التالية <i class="fas fa-chevron-left"></i>
+                </button>
             </div>
-            <span class="page-info">
-                <i class="fas fa-quran" style="color:var(--amber);margin-left:.4rem;"></i>
-                ${surah.name} — ${toAr(surah.numberOfAyahs)} آية
-            </span>
-        </div>
-        <div class="quran-text-wrap quran-fade">
-            <div class="quran-text" id="quranText" style="font-size:${currentFontSize}rem;">
-                ${ayahsHtml}
-            </div>
-        </div>
-        
-        <!-- Navigation -->
-        <div class="surah-nav">
-            <button class="surah-nav-btn" onclick="navigateSurah(-1)"
-                ${surah.number <= 1 ? 'disabled' : ''}>
-                <i class="fas fa-chevron-right"></i>
-                السورة السابقة
-            </button>
-            <span style="font-family:'Tajawal',serif;font-size:.82rem;color:var(--text-muted);">
-                ${toAr(surah.number)} / ١١٤
-            </span>
-            <button class="surah-nav-btn" onclick="navigateSurah(+1)"
-                ${surah.number >= 114 ? 'disabled' : ''}>
-                السورة التالية
-                <i class="fas fa-chevron-left"></i>
-            </button>
         </div>
     `;
 
-        // Show audio
-        document.getElementById('audioSection').style.display = 'block';
+        const txt = document.getElementById('quranText');
+        if (txt) txt.style.fontSize = currentFontSize + 'rem';
+
+        renderAyahPage();
     }
 
-    /* ── Stats ── */
-    function updateStats(surah) {
-        const card = document.getElementById('surah-stats');
-        card.style.display = 'block';
-        document.getElementById('stats-name').textContent = surah.name;
-        document.getElementById('stats-row').innerHTML = `
-        <span class="stat-chip"><i class="fas fa-list-ol"></i>${toAr(surah.numberOfAyahs)} آية</span>
-        <span class="stat-chip"><i class="fas fa-map-marker-alt"></i>${surah.revelationType === 'Meccan' ? 'مكية' : 'مدنية'}</span>
-    `;
+    function renderAyahPage() {
+        if (!currentSurahData) return;
+        const ayahs = currentSurahData.ayahs;
+        const totalPages = Math.max(1, Math.ceil(ayahs.length / pageSize));
+        if (currentPage > totalPages) currentPage = totalPages;
+        if (currentPage < 1) currentPage = 1;
+
+        const start = (currentPage - 1) * pageSize;
+        const slice = ayahs.slice(start, start + pageSize);
+
+        // Le بسملة n'apparaît que sur la première page de la sourate (pas à chaque page)
+        const showBismillah = currentPage === 1 && currentSurahData.number !== 1 && currentSurahData.number !== 9;
+        const bismillahSlot = document.getElementById('bismillahSlot');
+        if (bismillahSlot) {
+            bismillahSlot.innerHTML = showBismillah
+                ? `<div class="bismillah-block quran-fade">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</div>`
+                : '';
+        }
+
+        const ayahsHtml = slice.map(a => `
+        <span class="ayah-block" data-num="${a.number}" data-local="${a.numberInSurah}" tabindex="0" role="button"
+            aria-label="آية ${a.numberInSurah}, اضغط أو مرّر للاستماع">${a.text} <span class="ayah-num">${toAr(a.numberInSurah)}</span></span>
+    `).join('');
+
+        const txt = document.getElementById('quranText');
+        if (txt) txt.innerHTML = ayahsHtml;
+
+        const nav = document.getElementById('ayahPageNav');
+        if (nav) {
+            if (totalPages > 1) {
+                nav.innerHTML = `
+                <button class="page-nav-btn" onclick="changeAyahPage(-1)" ${currentPage <= 1 ? 'disabled' : ''}>
+                    <i class="fas fa-chevron-right"></i> السابقة
+                </button>
+                <span class="page-indicator">
+                    صفحة ${toAr(currentPage)} من ${toAr(totalPages)}<br>
+                    آيات ${toAr(start + 1)} إلى ${toAr(Math.min(start + pageSize, ayahs.length))}
+                </span>
+                <button class="page-nav-btn" onclick="changeAyahPage(1)" ${currentPage >= totalPages ? 'disabled' : ''}>
+                    التالية <i class="fas fa-chevron-left"></i>
+                </button>
+            `;
+            } else {
+                nav.innerHTML = '';
+            }
+        }
+
+        bindAyahEvents();
     }
 
-    /* ── Navigation ── */
+    function changeAyahPage(delta) {
+        if (!currentSurahData) return;
+        const totalPages = Math.max(1, Math.ceil(currentSurahData.ayahs.length / pageSize));
+        const next = currentPage + delta;
+        if (next < 1 || next > totalPages) return;
+        currentPage = next;
+        stopAyahAudio();
+        renderAyahPage();
+        document.getElementById('quranShell').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function changePageSize(val) {
+        pageSize = parseInt(val);
+        currentPage = 1;
+        stopAyahAudio();
+        renderAyahPage();
+    }
+
     function navigateSurah(delta) {
         const next = currentSurah + delta;
         if (next < 1 || next > 114) return;
         selectSurah(next);
-        window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    /* ── Audio ── */
+    /* ── Audio : sourate complète ── */
     function playAudio() {
         if (!currentSurah) return;
+        stopAyahAudio();
         const reciter = document.getElementById('reciterSelect').value;
         const url = `https://cdn.islamic.network/quran/audio-surah/128/${reciter}/${currentSurah}.mp3`;
         const player = document.getElementById('audioPlayer');
@@ -1269,8 +1401,83 @@
         player.play().catch(() => { });
     }
 
+    /* ── Audio : par ayah (survol ou clic) ──
+       CDN : https://cdn.islamic.network/quran/audio/{bitrate}/{edition}/{numéro_ayah_global}.mp3 */
+    function bindAyahEvents() {
+        const txt = document.getElementById('quranText');
+        if (!txt) return;
+        txt.querySelectorAll('.ayah-block').forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                if (!hoverAudioEnabled) return;
+                clearTimeout(hoverTimer);
+                hoverTimer = setTimeout(() => playAyah(el), HOVER_DELAY);
+            });
+            el.addEventListener('mouseleave', () => clearTimeout(hoverTimer));
+            el.addEventListener('click', () => {
+                clearTimeout(hoverTimer);
+                playAyah(el, true);
+            });
+            el.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    playAyah(el, true);
+                }
+            });
+        });
+    }
 
-    // Écouter les changements d'état pour mettre à jour l'icône
+    function playAyah(el, isExplicitAction) {
+        const num = el.getAttribute('data-num');
+        const reciter = document.getElementById('reciterSelect').value;
+
+        if (activeAyahNum === num) {
+            if (isExplicitAction) stopAyahAudio();
+            return;
+        }
+
+        const fullPlayer = document.getElementById('audioPlayer');
+        fullPlayer.pause();
+        fullPlayer.style.display = 'none';
+
+        if (activeAyahEl) activeAyahEl.classList.remove('ayah-playing');
+
+        activeAyahEl = el;
+        activeAyahNum = num;
+        el.classList.add('ayah-playing');
+
+        ayahAudio.src = `https://cdn.islamic.network/quran/audio/128/${reciter}/${num}.mp3`;
+        ayahAudio.play().catch(() => { });
+    }
+
+    function stopAyahAudio() {
+        ayahAudio.pause();
+        if (activeAyahEl) activeAyahEl.classList.remove('ayah-playing');
+        activeAyahEl = null;
+        activeAyahNum = null;
+    }
+
+    ayahAudio.addEventListener('ended', () => {
+        if (activeAyahEl) activeAyahEl.classList.remove('ayah-playing');
+        activeAyahEl = null;
+        activeAyahNum = null;
+    });
+
+    function toggleHoverAudio(checked) {
+        hoverAudioEnabled = checked;
+        if (!checked) clearTimeout(hoverTimer);
+    }
+
+    /* ── Mode lecture plein écran (masque le hero de la page) ── */
+    function toggleFocusMode() {
+        const active = document.body.classList.toggle('quran-focus-mode');
+        const btn = document.getElementById('focusModeBtn');
+        if (btn) {
+            btn.classList.toggle('is-active', active);
+            btn.innerHTML = `<i class="fas fa-${active ? 'compress-alt' : 'expand'}"></i>`;
+        }
+    }
+
+    /* ── Plein écran natif (bouton partagé avec le reste du site, conservé) ── */
     document.addEventListener('fullscreenchange', updateFullscreenIcon);
     document.addEventListener('webkitfullscreenchange', updateFullscreenIcon);
     document.addEventListener('msfullscreenchange', updateFullscreenIcon);
@@ -1278,25 +1485,22 @@
     function updateFullscreenIcon() {
         const icon = document.querySelector('.fullscreen-btn i');
         if (icon) {
-            if (document.fullscreenElement) {
-                icon.className = 'fas fa-compress';   // icône réduire
-            } else {
-                icon.className = 'fas fa-expand';     // icône agrandir
-            }
+            icon.className = document.fullscreenElement ? 'fas fa-compress' : 'fas fa-expand';
         }
     }
-    /* ── Font size ── */
+
+    /* ── Taille de police ── */
     function adjustFont(delta) {
         currentFontSize = Math.max(MIN_FONT, Math.min(MAX_FONT, currentFontSize + delta));
         const txt = document.getElementById('quranText');
         const lbl = document.getElementById('fontSizeLabel');
         if (txt) txt.style.fontSize = currentFontSize + 'rem';
-        if (lbl) lbl.textContent = Math.round(currentFontSize * 62.5) + '%';
+        if (lbl) lbl.textContent = Math.round(currentFontSize * 58.8) + '%';
     }
 
     /* ── Error state ── */
     function showReaderError(msg) {
-        document.getElementById('readerArea').innerHTML = `
+        document.getElementById('readingColumn').innerHTML = `
         <div class="quran-error">
             <i class="fas fa-exclamation-circle"></i>
             <h3>تعذّر التحميل</h3>
@@ -1313,7 +1517,7 @@
         return String(n).replace(/\d/g, d => '٠١٢٣٤٥٦٧٨٩'[d]);
     }
 
-    /* ── Expose for select onchange compatibility ── */
+    /* ── Compatibilité avec le select caché ── */
     function loadSurah() {
         const v = parseInt(document.getElementById('surahSelect').value);
         if (v) selectSurah(v);

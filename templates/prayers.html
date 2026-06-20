@@ -8,27 +8,27 @@
    PRAYERS PAGE — Premium Redesign
 ═══════════════════════════════════════════════ */
 
-/* ── MOBILE : ton image originale (inchangée) ── */
-.page-header::before {
-    background:
-        linear-gradient(180deg,
-            rgba(4, 4, 13, .45) 0%,
-            rgba(4, 4, 13, .20) 40%,
-            rgba(4, 4, 13, .92) 100%),
-        url('https://i.pinimg.com/736x/4a/10/9c/4a109c543b84e6a6cd8e38b2e012c826.jpg') center 35% / cover no-repeat;
-}
-
-/* ── DESKTOP uniquement : nouvelle image paysage ── */
-@media (min-width: 768px) {
+    /* ── MOBILE : ton image originale (inchangée) ── */
     .page-header::before {
         background:
             linear-gradient(180deg,
-                rgba(4, 4, 13, .42) 0%,
-                rgba(4, 4, 13, .08) 38%,
-                rgba(4, 4, 13, .90) 100%),
-            url('static/images/2.jpg') center 30% / cover no-repeat !important;
+                rgba(4, 4, 13, .45) 0%,
+                rgba(4, 4, 13, .20) 40%,
+                rgba(4, 4, 13, .92) 100%),
+            url('https://i.pinimg.com/736x/4a/10/9c/4a109c543b84e6a6cd8e38b2e012c826.jpg') center 35% / cover no-repeat;
     }
-}
+
+    /* ── DESKTOP uniquement : nouvelle image paysage ── */
+    @media (min-width: 768px) {
+        .page-header::before {
+            background:
+                linear-gradient(180deg,
+                    rgba(4, 4, 13, .42) 0%,
+                    rgba(4, 4, 13, .08) 38%,
+                    rgba(4, 4, 13, .90) 100%),
+                url('static/images/2.jpg') center 30% / cover no-repeat !important;
+        }
+    }
 
     /* ── Prayer section wrapper ── */
     .prayers-section {
@@ -183,7 +183,7 @@
 
     /* Dhuhr */
     .prayer-big-card[data-prayer="dhuhr"] .card-bg {
-        
+
         background-image: url('https://i.pinimg.com/736x/94/ce/ee/94ceee8ff57547da7e1ae156a46b3503.jpg');
         opacity: .30;
     }
@@ -313,17 +313,19 @@
         display: inline-flex;
         align-items: center;
         gap: .45rem;
-        background: rgba(26,18,8,.70);       
-        border: 1px solid rgba(201,146,42,.5); 
-        color: #E8B050;                       
+        background: rgba(26, 18, 8, .70);
+        border: 1px solid rgba(201, 146, 42, .5);
+        color: #E8B050;
         padding: .5rem 1.2rem;
         border-radius: 50px;
         font-size: .85rem;
         font-family: 'Tajawal', sans-serif;
         cursor: pointer;
-        backdrop-filter: blur(4px);            /* ← flou derrière le bouton */
-        transition: all .35s cubic-bezier(.34,1.56,.64,1);
+        backdrop-filter: blur(4px);
+        /* ← flou derrière le bouton */
+        transition: all .35s cubic-bezier(.34, 1.56, .64, 1);
     }
+
     .prayed-btn:hover {
         background: linear-gradient(135deg, var(--gold-dark), var(--gold));
         color: #060408;
@@ -827,8 +829,31 @@
         const totalMin = Math.floor(ms / 60000);
         const h = Math.floor(totalMin / 60);
         const m = totalMin % 60;
-        if (h > 0) return `متبقي ${h} ساعة ${m > 0 ? `و ${m} دقيقة` : ''}`;
-        return `متبقي ${m} دقيقة`;
+
+        // Règles de grammaire arabe pour les nombres
+        function formatHours(n) {
+            if (n === 0) return '';
+            if (n === 1) return 'ساعة واحدة';
+            if (n === 2) return 'ساعتان';
+            if (n >= 3 && n <= 10) return `${n} ساعات`;
+            return `${n} ساعة`;
+        }
+
+        function formatMinutes(n) {
+            if (n === 0) return '';
+            if (n === 1) return 'دقيقة واحدة';
+            if (n === 2) return 'دقيقتان';
+            if (n >= 3 && n <= 10) return `${n} دقائق`;
+            return `${n} دقيقة`;
+        }
+
+        const hoursStr = formatHours(h);
+        const minsStr = formatMinutes(m);
+
+        if (h > 0 && m > 0) return `متبقٍّ ${hoursStr} و ${minsStr}`;
+        if (h > 0) return `متبقٍّ ${hoursStr}`;
+        if (m > 0) return `متبقٍّ ${minsStr}`;
+        return 'أقل من دقيقة';
     }
 
     /* ── Render cards ── */
@@ -967,7 +992,7 @@
     }
 
     /* ── Toast notification ── */
-    function showToast(msg) {  
+    function showToast(msg) {
         let toast = document.getElementById('prayer-toast');
         if (!toast) {
             toast = document.createElement('div');

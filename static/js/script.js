@@ -297,11 +297,11 @@ function loadHomePrayerTimes() {
 
     function fetchPrayersDirect(lat, lng) {
         // Date du jour au format DD-MM-YYYY
-        const now    = new Date();
-        const day    = String(now.getDate()).padStart(2, '0');
-        const month  = String(now.getMonth() + 1).padStart(2, '0');
-        const year   = now.getFullYear();
-        const date   = `${day}-${month}-${year}`;
+        const now = new Date();
+        const day = String(now.getDate()).padStart(2, '0');
+        const month = String(now.getMonth() + 1).padStart(2, '0');
+        const year = now.getFullYear();
+        const date = `${day}-${month}-${year}`;
 
         // Appel direct à Aladhan — sans passer par Flask
         fetch(`https://api.aladhan.com/v1/timings/${date}?latitude=${lat}&longitude=${lng}&method=2`)
@@ -327,7 +327,7 @@ function loadHomePrayerTimes() {
                 let nextPrayer = null;
                 let minDiff = Infinity;
                 order.forEach(k => {
-                    const ms   = timeToMs(timings[k]);
+                    const ms = timeToMs(timings[k]);
                     const diff = ms > nowMs ? ms - nowMs : ms + 86400000 - nowMs;
                     if (diff < minDiff) { minDiff = diff; nextPrayer = k; }
                 });
@@ -339,17 +339,17 @@ function loadHomePrayerTimes() {
                 container.innerHTML = '';
 
                 order.forEach(prayer => {
-                    const card     = document.createElement('div');
-                    const isNext   = prayer === nextPrayer;
+                    const card = document.createElement('div');
+                    const isNext = prayer === nextPrayer;
                     const prayerMs = timeToMs(timings[prayer]);
-                    const diffMs   = prayerMs - nowMs;
+                    const diffMs = prayerMs - nowMs;
 
                     let remainText = '';
                     if (diffMs <= 0) {
                         remainText = 'تمت الصلاة';
                     } else {
                         const diffMin = Math.floor(diffMs / 60000);
-                        remainText    = formatTimeInArabic(diffMin);
+                        remainText = formatTimeInArabic(diffMin);
                     }
 
                     card.className = `prayer-card${isNext ? ' active' : ''}`;
@@ -420,44 +420,32 @@ function getCurrentTimeInMilliseconds() {
 
 // Formater le temps en arabe correct
 function formatTimeInArabic(totalMinutes) {
-    const hours = Math.floor(totalMinutes / 60);
-    const minutes = totalMinutes % 60;
+    const h = Math.floor(totalMinutes / 60);
+    const m = totalMinutes % 60;
 
-    let result = '';
-
-    if (hours > 0) {
-        if (hours === 1) {
-            result += 'ساعة واحدة';
-        } else if (hours === 2) {
-            result += 'ساعتان';
-        } else if (hours >= 3 && hours <= 10) {
-            result += `${hours} ساعات`;
-        } else {
-            result += `${hours} ساعة`;
-        }
-
-        if (minutes > 0) {
-            result += ' و';
-        }
+    function formatHours(n) {
+        if (n === 0) return '';
+        if (n === 1) return 'ساعة واحدة';
+        if (n === 2) return 'ساعتان';
+        if (n >= 3 && n <= 10) return `${n} ساعات`;
+        return `${n} ساعة`;
     }
 
-    if (minutes > 0) {
-        if (minutes === 1) {
-            result += 'دقيقة واحدة';
-        } else if (minutes === 2) {
-            result += 'دقيقتان';
-        } else if (minutes >= 3 && minutes <= 10) {
-            result += `${minutes} دقائق`;
-        } else {
-            result += `${minutes} دقيقة`;
-        }
+    function formatMinutes(n) {
+        if (n === 0) return '';
+        if (n === 1) return 'دقيقة واحدة';
+        if (n === 2) return 'دقيقتان';
+        if (n >= 3 && n <= 10) return `${n} دقائق`;
+        return `${n} دقيقة`;
     }
 
-    if (result === '') {
-        result = 'أقل من دقيقة';
-    }
+    const hoursStr = formatHours(h);
+    const minsStr = formatMinutes(m);
 
-    return result;
+    if (h > 0 && m > 0) return `متبقٍّ ${hoursStr} و ${minsStr}`;
+    if (h > 0) return `متبقٍّ ${hoursStr}`;
+    if (m > 0) return `متبقٍّ ${minsStr}`;
+    return 'أقل من دقيقة';
 }
 
 // Afficher les horaires de prière sur la page d'accueil
@@ -749,83 +737,83 @@ const DHIKR_LIST = [
         icon: 'fas fa-star',
         arabic: 'سُبْحَانَ اللهِ وَبِحَمْدِهِ سُبْحَانَ اللهِ الْعَظِيمِ',
         virtue: '« كَلِمَتَانِ خَفِيفَتَانِ عَلَى اللِّسَانِ، ثَقِيلَتَانِ فِي الْمِيزَانِ، حَبِيبَتَانِ إِلَى الرَّحْمَنِ » — متفق عليه',
-       
+
     },
     {
         type: 'تهليل',
         icon: 'fas fa-moon',
         arabic: 'لَا إِلَهَ إِلَّا اللهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ',
         virtue: '« مَنْ قَالَهَا مِئَةَ مَرَّةٍ فِي يَوْمٍ كَانَتْ لَهُ عَدْلَ عَشْرِ رِقَابٍ » — متفق عليه',
-       
+
     },
     {
         type: 'صلاة على النبي',
         icon: 'fas fa-sun',
         arabic: 'اللَّهُمَّ صَلِّ وَسَلِّمْ وَبَارِكْ عَلَى سَيِّدِنَا مُحَمَّدٍ وَعَلَى آلِهِ وَصَحْبِهِ أَجْمَعِينَ',
         virtue: '« مَنْ صَلَّى عَلَيَّ صَلَاةً وَاحِدَةً صَلَّى اللهُ عَلَيْهِ عَشْراً » — رواه مسلم',
-       
+
     },
     {
         type: 'حوقلة',
         icon: 'fas fa-infinity',
         arabic: 'لَا حَوْلَ وَلَا قُوَّةَ إِلَّا بِاللهِ الْعَلِيِّ الْعَظِيمِ',
         virtue: '« هِيَ كَنْزٌ مِنْ كُنُوزِ الْجَنَّةِ » — متفق عليه',
-        
+
     },
     {
         type: 'تكبير',
         icon: 'fas fa-mosque',
         arabic: 'اللهُ أَكْبَرُ كَبِيراً، وَالْحَمْدُ للهِ كَثِيراً، وَسُبْحَانَ اللهِ بُكْرَةً وَأَصِيلاً',
-        
+
     },
     {
         type: 'دعاء',
         icon: 'fas fa-hands',
         arabic: 'رَبِّ اغْفِرْ لِي وَلِوَالِدَيَّ وَلِلْمُؤْمِنِينَ يَوْمَ يَقُومُ الْحِسَابُ',
         virtue: '« الدُّعَاءُ هُوَ الْعِبَادَةُ » —  خلاصة حكم المحدث : [إسناده صحيح أو حسن أو ما قاربهما]',
-        
+
     },
     {
         type: 'تحميد',
         icon: 'fas fa-heart',
         arabic: 'الْحَمْدُ للهِ حَمْداً كَثِيراً طَيِّباً مُبَارَكاً',
         virtue: '« الْحَمْدُ للهِ تَمْلَأُ الْمِيزَانَ » — رواه مسلم',
-      
+
     },
     {
         type: 'استغفار',
         icon: 'fas fa-cloud-rain',
         arabic: 'مَن جلسَ في مجلِسٍ فَكَثرَ فيهِ لغطُهُ ، فقالَ قبلَ أن يقومَ من مجلسِهِ ذلِكَ : سُبحانَكَ اللَّهمَّ وبحمدِكَ ، أشهدُ أن لا إلَهَ إلَّا أنتَ أستغفرُكَ وأتوبُ إليكَ ، إلَّا غُفِرَ لَهُ ما كانَ في مجلِسِهِ ذلِكَ',
         virtue: '« كَفَّارَةُ الْمَجْلِسِ — مَنْ قَالَهَا غُفِرَ لَهُ مَا كَانَ فِي مَجْلِسِهِ » — رواه الترمذي',
-        
+
     },
     {
         type: 'تسبيح',
         icon: 'fas fa-star',
         arabic: 'سُبْحَانَ اللهِ وَالْحَمْدُ للهِ وَلَا إِلَهَ إِلَّا اللهُ وَاللهُ أَكْبَرُ',
         virtue: '« أَحَبُّ الْكَلَامِ إِلَى اللهِ أَرْبَعٌ: سُبْحَانَ اللهِ، وَالْحَمْدُ للهِ، وَلَا إِلَهَ إِلَّا اللهُ، وَاللهُ أَكْبَرُ » — رواه مسلم',
-        
+
     },
     {
         type: 'حسبي الله',
         icon: 'fas fa-shield-halved',
         arabic: 'حَسْبُنَا اللهُ وَنِعْمَ الْوَكِيلُ',
         virtue: '« عَنِ ابنِ عَبَّاسٍ، قال: كان آخِرَ قَولِ إبراهيمَ حينَ أُلقيَ في النَّارِ: حَسبيَ اللهُ ونِعمَ الوكيلُ » — رواه البخاري',
-       
+
     },
     {
         type: 'تهليل',
         icon: 'fas fa-moon',
         arabic: 'لَا إِلَهَ إِلَّا اللهُ',
         virtue: ' ما مِنْ عبدٍ قال: « لا إلهَ إلا الله، ثم مات على ذلك إلا دخَلَ الجنة » — رواه البخاري ',
-       
+
     },
     {
         type: 'دعاء',
         icon: 'fas fa-hands',
         arabic: 'يَا حَيُّ يَا قَيُّومُ بِرَحْمَتِكَ أَسْتَغِيثُ، أَصْلِحْ لِي شَأْنِي كُلَّهُ وَلَا تَكِلْنِي إِلَى نَفْسِي طَرْفَةَ عَيْنٍ',
         virtue: 'من أعظم الأدعية التي تتضمن تحقيق العبودية لله رب العالمين',
-        
+
     }
 ];
 
@@ -917,7 +905,7 @@ function toArabicNotif(n) {
 function startDhikrSystem() {
     // Pages autorisées uniquement
     const allowedPages = ['/', '/prayers', '/qibla'];
-    const currentPage  = window.location.pathname;
+    const currentPage = window.location.pathname;
 
     if (!allowedPages.includes(currentPage)) return; // ← stoppe tout
 

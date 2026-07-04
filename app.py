@@ -1,9 +1,12 @@
 from flask import Flask, render_template, jsonify, request
+from flask_compress import Compress
 from datetime import datetime
 import requests
 import math
 
 app = Flask(__name__)
+Compress(app)
+app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 604800  # cache 7 jours sur /static
 
 @app.route('/')
 def index():
@@ -126,7 +129,7 @@ def api_qibla_direction():
 
 @app.errorhandler(404)
 def page_not_found(e):
-    return render_template('404.html'), 404
+    return "Page non trouvée", 404
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000)

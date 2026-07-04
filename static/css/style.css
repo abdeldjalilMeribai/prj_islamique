@@ -4,8 +4,6 @@
    Complete Radical Redesign v2
    ================================================================ */
 
-@import url('https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Playfair+Display:wght@600;700;800&family=Tajawal:wght@300;400;500;700&family=Scheherazade+New:wght@400;500;700&display=swap');
-
 *,
 *::before,
 *::after {
@@ -270,7 +268,7 @@ nav a.active {
   z-index: 0;
   background:
     linear-gradient(to bottom, rgba(10, 7, 3, .55) 0%, rgba(10, 7, 3, .30) 45%, rgba(10, 7, 3, .75) 100%),
-    url('/static/images/1.jpg') center/cover no-repeat;
+    url('/static/images/1.avif') center/cover no-repeat;
 }
 
 .hero::after {
@@ -525,7 +523,7 @@ nav a.active {
   height: 100%;
   left: 0;
   top: 0;
-  background: url('https://i.pinimg.com/736x/9b/e1/af/9be1af92e33110b6e0b387c7f1f6960e.jpg') center/cover no-repeat;
+  background: url('/static/images/welcome-panel-bg.jpg') center/cover no-repeat;
   opacity: .35;
   border-radius: 0;
 }
@@ -805,7 +803,7 @@ nav a.active {
   inset: 0;
   background:
     linear-gradient(135deg, rgba(10, 7, 3, .88), rgba(26, 18, 8, .82)),
-    url('https://images.unsplash.com/photo-1585036156171-384164a8c675?w=1600&q=80') center/cover no-repeat;
+    url('/static/images/verse-banner-bg.jpg') center/cover no-repeat;
 }
 
 .verse-content {
@@ -871,7 +869,7 @@ blockquote cite {
   inset: 0;
   background:
     linear-gradient(180deg, rgba(10, 7, 3, .55) 0%, rgba(10, 7, 3, .20) 50%, rgba(10, 7, 3, .90) 100%),
-    url('https://i.pinimg.com/736x/c7/30/17/c730170fbd7dc19ae70aebf77036239b.jpg') center 40%/cover no-repeat;
+    url('/static/images/page-header-default.jpg') center 40%/cover no-repeat;
 }
 
 .page-header::after {
@@ -2029,7 +2027,7 @@ footer::before {
     /* On remplace l'image fixe par une variable CSS qu'on changera en JS */
     background:
       linear-gradient(to bottom, rgba(10, 7, 3, .55) 0%, rgba(10, 7, 3, .30) 45%, rgba(10, 7, 3, .75) 100%),
-      var(--hero-mobile-bg, url('/static/images/1.jpg')) center/cover no-repeat !important;
+      var(--hero-mobile-bg, url('/static/images/mobile_hero.jpg')) center/cover no-repeat !important;
   }
 }
 
@@ -2366,4 +2364,3 @@ body {
     padding-top: calc(env(safe-area-inset-top) + 0px);
   }
 }
-

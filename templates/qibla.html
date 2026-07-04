@@ -16,7 +16,7 @@
             rgba(4, 4, 13, .45) 0%,
             rgba(4, 4, 13, .20) 40%,
             rgba(4, 4, 13, .92) 100%),
-        url('https://i.pinimg.com/736x/32/e5/d9/32e5d9c18c3a8ee16c60dbc70379c877.jpg')center 40% / cover no-repeat;
+        url('/static/images/header-qibla-mobile.jpg') center 40% / cover no-repeat;
 }
 
 /* ── DESKTOP uniquement : nouvelle image paysage ── */
@@ -783,7 +783,7 @@
                 <!-- Kaaba info card -->
                 <div class="kaaba-info-card">
                     <div class="kaaba-img-wrap">
-                        <img src="https://i.pinimg.com/736x/79/0f/b9/790fb92209b41fd080ea11ea9624925e.jpg"
+                        <img width="500" height="500" loading="lazy" src="{{ url_for('static', filename='images/qibla-illustration.jpg') }}"
                             alt="الكعبة المشرفة" loading="lazy" onerror="this.src=''">
                     </div>
                     <div class="kaaba-info-body">

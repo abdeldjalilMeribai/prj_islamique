@@ -6,6 +6,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>{% block title %}سبيل المسلم{% endblock %}</title>
 
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="preload" as="image" fetchpriority="high" media="(min-width: 768px)"
+          href="{{ url_for('static', filename='images/1.avif') }}">
+    <link rel="preload" as="image" fetchpriority="high" media="(max-width: 767px)"
+          href="{{ url_for('static', filename='images/mobile_hero.jpg') }}">
+
     <link
         href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Playfair+Display:wght@600;700;800&family=Tajawal:wght@300;400;500;700&family=Scheherazade+New:wght@400;500;700&display=swap"
         rel="stylesheet">
@@ -333,8 +341,8 @@
 
                     <div class="feature-card">
                         <div class="feature-card-img-wrap">
-                            <img class="feature-card-img"
-                                src="https://i.pinimg.com/736x/27/80/f1/2780f101b7a4e6e79ac02d628a771963.jpg"
+                            <img class="feature-card-img" width="400" height="260"
+                                src="{{ url_for('static', filename='images/feature-prayers.jpg') }}"
                                 alt="أوقات الصلاة" loading="lazy" onerror="this.parentElement.style.display='none'">
                         </div>
                         <div class="feature-card-body">
@@ -346,8 +354,8 @@
 
                     <div class="feature-card">
                         <div class="feature-card-img-wrap">
-                            <img class="feature-card-img"
-                                src="https://i.pinimg.com/736x/22/2e/0c/222e0ca7338430e55191b0996870f21f.jpg"
+                            <img class="feature-card-img" width="400" height="260"
+                                src="{{ url_for('static', filename='images/feature-adkar.jpg') }}"
                                 alt="أذكار وتسبيح" loading="lazy" onerror="this.parentElement.style.display='none'">
                         </div>
                         <div class="feature-card-body">
@@ -359,8 +367,8 @@
 
                     <div class="feature-card">
                         <div class="feature-card-img-wrap">
-                            <img class="feature-card-img"
-                                src="https://i.pinimg.com/736x/ea/b0/c1/eab0c10f1bb88dd274b95440c5eec1ff.jpg"
+                            <img class="feature-card-img" width="400" height="260"
+                                src="{{ url_for('static', filename='images/feature-qibla.jpg') }}"
                                 alt="بوصلة القبلة" loading="lazy" onerror="this.parentElement.style.display='none'">
                         </div>
                         <div class="feature-card-body">
@@ -372,8 +380,8 @@
 
                     <div class="feature-card">
                         <div class="feature-card-img-wrap">
-                            <img class="feature-card-img"
-                                src="https://i.pinimg.com/736x/90/b7/8f/90b78ff7e1c29820b01604a29f7b34c1.jpg"
+                            <img class="feature-card-img" width="400" height="260"
+                                src="{{ url_for('static', filename='images/feature-couran.jpg') }}"
                                 alt="القرآن الكريم" loading="lazy" onerror="this.parentElement.style.display='none'">
                         </div>
                         <div class="feature-card-body">
@@ -385,8 +393,8 @@
 
                     <div class="feature-card">
                         <div class="feature-card-img-wrap">
-                            <img class="feature-card-img"
-                                src="https://i.pinimg.com/736x/fb/3f/9a/fb3f9a7c4f95a702ebb3ebdd1acafb16.jpg"
+                            <img class="feature-card-img" width="400" height="260"
+                                src="{{ url_for('static', filename='images/feature-adhkar.jpg') }}"
                                 alt="حصن المسلم" loading="lazy" onerror="this.parentElement.style.display='none'">
                         </div>
                         <div class="feature-card-body">
@@ -595,7 +603,7 @@
             // Liste des images pour mobile 
             const mobileBgImages = [
                 "url('/static/images/mobile_hero.jpg')",
-                "url('/static/images/hero-mobile2.png')",
+                "url('/static/images/hero-mobile2.jpg')",
             ];
 
             let currentBg = 0;

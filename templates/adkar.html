@@ -397,79 +397,6 @@
         cursor: default;
     }
 
-    /* ══════════════════════════════
-   COMPLETION SECTION
-══════════════════════════════ */
-    .completion-wrap {
-        text-align: center;
-        padding: 3rem 2rem;
-        background: var(--panel);
-        border: 1px solid var(--border);
-        border-radius: var(--r-lg);
-        backdrop-filter: blur(18px);
-        box-shadow: var(--shadow-card);
-        position: relative;
-        overflow: hidden;
-    }
-
-    .completion-wrap::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 10%;
-        right: 10%;
-        height: 1px;
-        background: linear-gradient(90deg, transparent, var(--gold), transparent);
-        opacity: .6;
-    }
-
-    .completion-wrap p {
-        font-family: 'Scheherazade New', serif;
-        font-size: 1.05rem;
-        color: var(--text-muted);
-        margin-bottom: 1.5rem;
-        line-height: 2;
-    }
-
-    .completion-btn {
-        display: inline-flex;
-        align-items: center;
-        gap: .8rem;
-        background: linear-gradient(135deg, var(--emerald, #1B6B45), #27a869);
-        color: #fff;
-        border: none;
-        padding: 1.1rem 2.8rem;
-        border-radius: 50px;
-        font-size: 1.1rem;
-        font-weight: 600;
-        font-family: 'El Messiri', serif;
-        cursor: pointer;
-        transition: all .35s cubic-bezier(.34, 1.56, .64, 1);
-        box-shadow: 0 5px 25px rgba(39, 168, 105, .35);
-    }
-
-    .completion-btn:hover {
-        transform: translateY(-4px) scale(1.03);
-        box-shadow: 0 12px 40px rgba(39, 168, 105, .5);
-    }
-
-    .completion-status {
-        margin-top: 1.2rem;
-        padding: 1rem 2rem;
-        border-radius: var(--r);
-        display: none;
-        font-family: 'El Messiri', serif;
-        font-size: .95rem;
-        animation: fade-in-down .4s ease;
-    }
-
-    .completion-status.success {
-        background: rgba(27, 107, 69, .15);
-        border: 1px solid rgba(39, 168, 105, .35);
-        color: #4dd98a;
-        display: block;
-    }
-
     /* ── Ripple animation on tap ── */
     @keyframes ripple-out {
         from {
@@ -753,16 +680,6 @@
 
         </div><!-- /dhikr-grid -->
 
-        <!-- ── Completion Section ── -->
-        <div class="completion-wrap">
-            <p>« وَالذَّاكِرِينَ اللهَ كَثِيراً وَالذَّاكِرَاتِ أَعَدَّ اللهُ لَهُم مَّغْفِرَةً وَأَجْراً عَظِيماً »</p>
-            <button class="completion-btn" onclick="markAllCompleted()">
-                <i class="fas fa-check-circle"></i>
-                تمّت الأذكار بحمد الله
-            </button>
-            <div class="completion-status" id="completion-status"></div>
-        </div>
-
     </div>
 </section>
 
@@ -1009,27 +926,5 @@
         } catch (e) { /* ignore */ }
     }
 
-    /* ── Mark all completed ── */
-    function markAllCompleted() {
-        const el = document.getElementById('completion-status');
-        el.innerHTML = `
-        <i class="fas fa-check-circle" style="margin-left:.5rem;"></i>
-        جزاك الله خيراً — تمّت الأذكار بحمد الله وتوفيقه
-    `;
-        el.className = 'completion-status success';
-
-        // Pulse all completed cards
-        document.querySelectorAll('.dhikr-card').forEach((c, i) => {
-            setTimeout(() => {
-                c.style.transition = 'box-shadow .4s ease';
-                c.style.boxShadow = '0 0 25px rgba(39,168,105,.3), 0 0 0 1px rgba(39,168,105,.25)';
-                setTimeout(() => { c.style.boxShadow = ''; }, 800);
-            }, i * 60);
-        });
-
-        setTimeout(() => {
-            el.className = 'completion-status';
-        }, 5000);
-    }
 </script>
 {% endblock %}

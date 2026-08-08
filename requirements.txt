@@ -1,0 +1,125 @@
+# ============================================
+# WEB (Flask & extensions)
+# ============================================
+Flask>=3.0
+Jinja2>=3.1
+Flask-SQLAlchemy>=3.1
+Flask-Migrate>=4.0
+Flask-WTF>=1.2
+Flask-Login>=0.6
+Flask-Mail>=0.9
+Flask-Cors>=4.0
+Flask-RESTful>=0.3.10
+
+# ============================================
+# DATABASES & STORAGE
+# ============================================
+SQLAlchemy>=2.0
+alembic>=1.13
+psycopg2-binary>=2.9
+pymysql>=1.1
+pymongo>=4.6
+redis>=5.0
+
+# ============================================
+# DATA SCIENCE & MANIPULATION
+# ============================================
+numpy>=1.26
+pandas>=2.1
+scipy>=1.11
+polars>=0.20
+
+# ============================================
+# VISUALIZATION
+# ============================================
+matplotlib>=3.8
+seaborn>=0.13
+plotly>=5.18
+bokeh>=3.3
+dash>=2.14
+
+# ============================================
+# MACHINE LEARNING
+# ============================================
+scikit-learn>=1.4
+xgboost>=2.0
+lightgbm>=4.2
+catboost>=1.2
+imbalanced-learn>=0.12
+shap>=0.44
+lime>=0.2
+
+# ============================================
+# DEEP LEARNING
+# ============================================
+# PyTorch (CPU)
+torch>=2.2
+torchvision>=0.17
+torchaudio>=2.2
+
+# TensorFlow (CPU)
+tensorflow>=2.15
+keras>=2.15
+
+# Hugging Face & NLP
+transformers>=4.40
+datasets>=2.18
+tokenizers>=0.19
+accelerate>=0.29
+sentencepiece>=0.2
+safetensors>=0.4
+
+# Computer Vision
+opencv-python>=4.9
+pillow>=10.3
+scikit-image>=0.22
+albumentations>=1.4
+
+# ============================================
+# OPTIMIZATION & OPERATIONS RESEARCH
+# ============================================
+optuna>=3.6
+hyperopt>=0.2.7
+nevergrad>=1.0
+scikit-optimize>=0.9
+
+cvxpy>=1.4
+pulp>=2.8
+ortools>=9.9
+
+scipy>=1.11
+pyomo>=6.7
+
+# ============================================
+# NATURAL LANGUAGE PROCESSING (NLP)
+# ============================================
+nltk>=3.8
+spacy>=3.7
+gensim>=4.3
+textblob>=0.17
+vaderSentiment>=3.3
+
+# ============================================
+# DEVELOPMENT UTILITIES
+# ============================================
+jupyter>=1.0
+ipython>=8.23
+requests>=2.31
+python-dotenv>=1.0
+pyyaml>=6.0
+joblib>=1.4
+tqdm>=4.66
+rich>=13.7
+loguru>=0.7
+dill>=0.3
+cloudpickle>=3.0
+
+# ============================================
+# TESTING & CODE QUALITY
+# ============================================
+pytest>=8.1
+coverage>=7.4
+black>=24.3
+flake8>=7.0
+mypy>=1.9
+isort>=5.13
